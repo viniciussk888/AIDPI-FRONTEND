@@ -12,13 +12,13 @@ import {
   makeStyles
 } from '@material-ui/core';
 import {
- // AlertCircle as AlertCircleIcon,
+  // AlertCircle as AlertCircleIcon,
   Home as HomeIcon,
- // Lock as LockIcon,
+  // Lock as LockIcon,
   Settings as SettingsIcon,
   Clipboard as ClipboardIcon,
   User as UserIcon,
- // UserPlus as UserPlusIcon,
+  // UserPlus as UserPlusIcon,
   Users as UsersIcon,
   FileText as FileTextIcon
 } from 'react-feather';
@@ -26,7 +26,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle'
 import NavItem from './NavItem';
 
 const user = {
-  avatar: <AccountCircle/>,
+  avatar: <AccountCircle />,
   jobTitle: 'Enfermeiro(a)',
   name: 'Katarina Smith'
 };
@@ -43,7 +43,7 @@ const items = [
     title: 'AIDPI'//PRODUCTS
   },
   {
-    href: '/app/customers',
+    href: '/app/patients',
     icon: UsersIcon,
     title: 'PACIENTES'
   },
@@ -53,7 +53,7 @@ const items = [
     title: 'VACINAÇÃO'//PRODUCTS
   },
   {
-    href: '/app/account',
+    href: '/app/user',
     icon: UserIcon,
     title: 'USUÁRIOS'
   },
@@ -76,7 +76,7 @@ const items = [
     href: '/404',
     icon: AlertCircleIcon,
     title: 'Error'
-  }*/ 
+  }*/
 ];
 
 const useStyles = makeStyles(() => ({
@@ -150,7 +150,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
             />
           ))}
         </List>
-      </Box> 
+      </Box>
     </Box>
   );
 
@@ -187,7 +187,7 @@ NavBar.propTypes = {
 };
 
 NavBar.defaultProps = {
-  onMobileClose: () => {},
+  onMobileClose: () => { },
   openMobile: false
 };
 

@@ -14,22 +14,22 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Toolbar = ({className, ...rest}) => {
+const Toolbar = ({ className, ...rest }) => {
   const classes = useStyles();
 
   return (
     <div
-    className={clsx(classes.root, className)}
-    {...rest}
+      className={clsx(classes.root, className)}
+      {...rest}
     >
       <Box
-    display="flex"
-    justifyContent="flex-end"
-    >
+        display="flex"
+        justifyContent="flex-end"
+      >
         <Button
-    color="primary"
-    variant="contained"
-    >
+          color="primary"
+          variant="contained"
+        >
           Cadastrar paciente
         </Button>
       </Box>
@@ -38,32 +38,32 @@ const Toolbar = ({className, ...rest}) => {
           <CardContent>
             <Box maxWidth={500}>
               <TextField
-    fullWidth
-    InputProps={{
-      startAdornment: (
-      <InputAdornment position="start">
+                fullWidth
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
                       <SvgIcon
-      fontSize="small"
-      color="action"
-      >
+                        fontSize="small"
+                        color="action"
+                      >
                         <SearchIcon />
                       </SvgIcon>
                     </InputAdornment>
-      )
-    }}
-    placeholder="Buscar paciente pelo nome"
-    variant="outlined"
-    />
-    
+                  )
+                }}
+                placeholder="Buscar paciente pelo nome"
+                variant="outlined"
+              />
+
             </Box>
-            
+
           </CardContent>
-          
+
         </Card>
-        
+
       </Box>
     </div>
-    );
+  );
 };
 
 Toolbar.propTypes = {
