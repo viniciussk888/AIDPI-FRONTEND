@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import moment from 'moment';
+import Edit from '@material-ui/icons/Edit'
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import data from './data';
 import {
   FormControlLabel,
   Checkbox,
-  Box,
   Button,
-  Card,
   CardContent,
   CardHeader,
   Divider,
   Grid,
-  TextField,
-  makeStyles
+  TextField, Box, Card, Table, TableBody, TableCell, TableHead, TableRow, Typography, makeStyles, IconButton
 } from '@material-ui/core';
 
 const states = [
@@ -31,13 +32,15 @@ const states = [
 ];
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const UserDetails = ({ className, ...rest }) => {
   const classes = useStyles();
   const [values, setValues] = useState({
   });
+
+  const [customers] = useState(data);
 
   const handleChange = (event) => {
     setValues({
@@ -46,8 +49,13 @@ const UserDetails = ({ className, ...rest }) => {
     });
   };
 
+  function toTop() {
+    alert('deu certo')
+  }
+
   return (
     <>
+      <span id='topo'></span>
       <form
         autoComplete="off"
         noValidate
@@ -261,7 +269,90 @@ const UserDetails = ({ className, ...rest }) => {
           </Button>
           </Box>
         </Card>
+
       </form>
+      <br />
+      {/*LISTA DE USUARIOS*/}
+
+      <Card>
+        <CardHeader
+          title="Lista de usuários"
+        />
+        <PerfectScrollbar>
+          <Box minWidth={1050}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>
+                    EDITAR
+                </TableCell>
+                  <TableCell>
+                    NOME
+                </TableCell>
+                  <TableCell>
+                    CPF
+                </TableCell>
+                  <TableCell>
+                    POSTO
+                </TableCell>
+                  <TableCell>
+                    CARGO
+                </TableCell>
+                  <TableCell>
+                    ADMIN
+                </TableCell>
+                  <TableCell>
+                    AIDPI
+                </TableCell>
+                  <TableCell>
+                    ATIVO
+                </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {customers.map((customer) => (
+                  <TableRow
+                    hover
+                    key={customer.id}
+                  >
+                    <TableCell padding="checkbox">
+                      <IconButton href="#topo" onClick={toTop} color="primary">
+                        <Edit />
+                      </IconButton>
+                    </TableCell>
+                    <TableCell>
+                      <Box
+                        alignItems="center"
+                        display="flex"
+                      >
+                        { /*getInitials(customer.name)*/}
+                        <Typography
+                          color="textPrimary"
+                          variant="body1"
+                        >
+                          {customer.name}
+                        </Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell>
+                      {customer.email}
+                    </TableCell>
+                    <TableCell>
+                      {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
+                    </TableCell>
+                    <TableCell>
+                      {customer.phone}
+                    </TableCell>
+                    <TableCell>
+                      {moment(customer.createdAt).format('DD/MM/YYYY')}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Box>
+        </PerfectScrollbar>
+      </Card>
     </>
   );
 };
