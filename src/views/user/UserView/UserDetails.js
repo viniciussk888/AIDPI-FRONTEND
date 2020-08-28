@@ -15,6 +15,8 @@ import {
   Grid,
   TextField, Box, Card, Table, TableBody, TableCell, TableHead, TableRow, Typography, makeStyles, IconButton
 } from '@material-ui/core';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const userType = [
   {
@@ -31,7 +33,7 @@ const userType = [
   }
 ];
 
-const serviceStation = [
+const serviceStationArray = [
   {
     value: 'UPA',
     label: 'UPA'
@@ -51,21 +53,57 @@ const useStyles = makeStyles(() => ({
 }));
 
 const UserDetails = ({ className, ...rest }) => {
+  const notifySucess = () => toast.success("Usuário cadastrado com sucesso!");
+  const notifyError = () => toast.error("Ocorreu um erro ao realizar cadastro!");
   const classes = useStyles();
-  const [values, setValues] = useState({
-  });
 
   const [customers] = useState(data);
 
-  const handleChange = (event) => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value
-    });
-  };
+  const [controlUpdate, setControlUpdate] = useState(false)
+
+  const [name, setName] = useState('')
+  const [login, setLogin] = useState('')
+  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
+  const [city, setCity] = useState('')
+  const [district, setDistrict] = useState('')
+  const [adress, setAdress] = useState('')
+  const [office, setOffice] = useState('Enfermeiro(a)')
+  const [serviceStation, setServiceStation] = useState('UPA')
+  const [aidpi, setAidpi] = useState(false)
+  const [admin, setAdmin] = useState(false)
+  const [active, setActive] = useState(false)
+
+
+
+  async function handleSubmitUserForm(e) {
+    e.preventDefault()
+
+    try {
+      console.log(
+        name,
+        login,
+        password,
+        email,
+        phone,
+        city,
+        district,
+        adress,
+        office,
+        serviceStation,
+        aidpi,
+        admin,
+        active,
+      )
+      notifySucess()
+    } catch (error) {
+      notifyError()
+    }
+  }
 
   function toTop() {
-    console.log('top')
+    setControlUpdate(true)
   }
 
   return (
@@ -73,8 +111,8 @@ const UserDetails = ({ className, ...rest }) => {
       <span id='topo'></span>
       <form
         autoComplete="off"
-        noValidate
         className={clsx(classes.root, className)}
+        onSubmit={handleSubmitUserForm}
         {...rest}
       >
         <Card>
@@ -96,10 +134,10 @@ const UserDetails = ({ className, ...rest }) => {
                 <TextField
                   fullWidth
                   label="Nome"
-                  name="firstName"
-                  onChange={handleChange}
+                  name="name"
+                  onChange={e => setName(e.target.value)}
                   required
-                  value={values.firstName}
+                  value={name}
                   variant="outlined"
                 />
               </Grid>
@@ -112,9 +150,9 @@ const UserDetails = ({ className, ...rest }) => {
                   fullWidth
                   label="Login"
                   name="login"
-                  onChange={handleChange}
+                  onChange={e => setLogin(e.target.value)}
                   required
-                  value={values.lastName}
+                  value={login}
                   variant="outlined"
                 />
               </Grid>
@@ -125,11 +163,12 @@ const UserDetails = ({ className, ...rest }) => {
               >
                 <TextField
                   fullWidth
+                  type="password"
                   label="Senha"
                   name="password"
-                  onChange={handleChange}
+                  onChange={e => setPassword(e.target.value)}
                   required
-                  value={values.lastName}
+                  value={password}
                   variant="outlined"
                 />
               </Grid>
@@ -142,9 +181,9 @@ const UserDetails = ({ className, ...rest }) => {
                   fullWidth
                   label="Email"
                   name="email"
-                  onChange={handleChange}
+                  onChange={e => setEmail(e.target.value)}
                   required
-                  value={values.email}
+                  value={email}
                   variant="outlined"
                 />
               </Grid>
@@ -154,12 +193,13 @@ const UserDetails = ({ className, ...rest }) => {
                 xs={12}
               >
                 <TextField
+                  required
                   fullWidth
                   label="Telefone"
                   name="phone"
-                  onChange={handleChange}
+                  onChange={e => setPhone(e.target.value)}
                   type="number"
-                  value={values.phone}
+                  value={phone}
                   variant="outlined"
                 />
               </Grid>
@@ -171,10 +211,10 @@ const UserDetails = ({ className, ...rest }) => {
                 <TextField
                   fullWidth
                   label="Cidade"
-                  name="country"
-                  onChange={handleChange}
+                  name="city"
+                  onChange={e => setCity(e.target.value)}
                   required
-                  value={values.country}
+                  value={city}
                   variant="outlined"
                 />
               </Grid>
@@ -186,10 +226,10 @@ const UserDetails = ({ className, ...rest }) => {
                 <TextField
                   fullWidth
                   label="Bairro"
-                  name="adress"
-                  onChange={handleChange}
+                  name="district"
+                  onChange={e => setDistrict(e.target.value)}
                   required
-                  value={values.country}
+                  value={district}
                   variant="outlined"
                 />
               </Grid>
@@ -201,10 +241,10 @@ const UserDetails = ({ className, ...rest }) => {
                 <TextField
                   fullWidth
                   label="Endereço"
-                  name="adress2"
-                  onChange={handleChange}
+                  name="adress"
+                  onChange={e => setAdress(e.target.value)}
                   required
-                  value={values.country}
+                  value={adress}
                   variant="outlined"
                 />
               </Grid>
@@ -218,11 +258,11 @@ const UserDetails = ({ className, ...rest }) => {
                   fullWidth
                   label="Cargo"
                   name="office"
-                  onChange={handleChange}
+                  onChange={e => setOffice(e.target.value)}
                   required
                   select
                   SelectProps={{ native: true }}
-                  value={values.state}
+                  value={office}
                   variant="outlined"
                 >
                   {userType.map((option) => (
@@ -244,15 +284,15 @@ const UserDetails = ({ className, ...rest }) => {
                 <TextField
                   fullWidth
                   label="Posto de atendimento"
-                  name="office"
-                  onChange={handleChange}
+                  name="serviceStation"
+                  onChange={e => setServiceStation(e.target.value)}
                   required
                   select
                   SelectProps={{ native: true }}
-                  value={values.state}
+                  value={serviceStation}
                   variant="outlined"
                 >
-                  {serviceStation.map((option) => (
+                  {serviceStationArray.map((option) => (
                     <option
                       key={option.value}
                       value={option.value}
@@ -264,21 +304,21 @@ const UserDetails = ({ className, ...rest }) => {
               </Grid>
               <Grid item xs={12} sm={2}>
                 <FormControlLabel
-                  control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
+                  control={<Checkbox onChange={() => (setActive(!active))} color="secondary" name="active" value={active} />}
                   label="Inativo"
                 />
               </Grid>
 
               <Grid item xs={12} sm={2}>
                 <FormControlLabel
-                  control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
+                  control={<Checkbox onChange={() => (setAdmin(!admin))} color="secondary" name="admin" value={admin} />}
                   label="Admin"
                 />
               </Grid>
 
               <Grid item xs={12} sm={2}>
                 <FormControlLabel
-                  control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
+                  control={<Checkbox onChange={() => (setAidpi(!aidpi))} color="secondary" name="aidpi" value={aidpi} />}
                   label="AIDPI"
                 />
               </Grid>
@@ -291,12 +331,24 @@ const UserDetails = ({ className, ...rest }) => {
             justifyContent="flex-end"
             p={2}
           >
-            <Button
-              color="primary"
-              variant="contained"
-            >
-              Gravar
+            {
+              controlUpdate ?
+                <Button
+                  color="primary"
+                  variant="contained"
+                >
+                  Atualizar
+        </Button>
+                :
+                <Button
+                  color="primary"
+                  variant="contained"
+                  type="submit"
+                >
+                  Gravar
           </Button>
+            }
+
           </Box>
         </Card>
 
@@ -383,6 +435,17 @@ const UserDetails = ({ className, ...rest }) => {
           </Box>
         </PerfectScrollbar>
       </Card>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   );
 };

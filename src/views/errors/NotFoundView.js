@@ -3,9 +3,12 @@ import {
   Box,
   Container,
   Typography,
-  makeStyles
+  makeStyles,
+  IconButton
 } from '@material-ui/core';
 import Page from 'src/components/Page';
+import ArrowBackIos from '@material-ui/icons/ArrowBackIos'
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,13 +33,20 @@ const NotFoundView = () => {
       className={classes.root}
       title="404"
     >
+      <Link to='/'>
+        <IconButton>
+          <ArrowBackIos /><h5>Voltar</h5>
+        </IconButton>
+      </Link>
       <Box
         display="flex"
         flexDirection="column"
         height="100%"
         justifyContent="center"
       >
+
         <Container maxWidth="md">
+
           <Typography
             align="center"
             color="textPrimary"
