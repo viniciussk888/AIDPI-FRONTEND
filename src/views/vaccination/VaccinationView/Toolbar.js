@@ -15,8 +15,8 @@ import { Search as SearchIcon } from 'react-feather';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
-  importButton: {
-    marginRight: theme.spacing(1)
+  font: {
+    fontFamily: 'Roboto'
   },
   exportButton: {
     marginRight: theme.spacing(1)
@@ -40,7 +40,7 @@ const Toolbar = ({ className, ...rest }) => {
       <Box mt={3}>
         <Card>
           <CardContent>
-            <h5>Buscar pelo Nº do SUS ou CPF</h5>
+            <h5 className={classes.font}>Buscar pelo Nº do SUS ou CPF</h5>
             <Box maxWidth={500} className={classes.boxSearch}>
               <TextField
                 fullWidth
