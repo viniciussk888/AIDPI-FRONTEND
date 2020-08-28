@@ -21,7 +21,7 @@ const Dashboard = () => {
   return (
     <Page
       className={classes.root}
-      title="Dashboard"
+      title="Início"
     >
       <Container maxWidth={false}>
         <Grid

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom'
 import clsx from 'clsx';
 import { Box, Button, Card, CardContent, TextField, InputAdornment, SvgIcon, makeStyles } from '@material-ui/core';
 import { Search as SearchIcon } from 'react-feather';
@@ -11,6 +12,12 @@ const useStyles = makeStyles((theme) => ({
   },
   exportButton: {
     marginRight: theme.spacing(1)
+  },
+  boxSearch: {
+    display: 'flex'
+  },
+  buttonSearch: {
+    marginLeft: theme.spacing(2)
   }
 }));
 
@@ -26,17 +33,19 @@ const Toolbar = ({ className, ...rest }) => {
         display="flex"
         justifyContent="flex-end"
       >
-        <Button
-          color="primary"
-          variant="contained"
-        >
-          Cadastrar paciente
+        <Link to="/app/newpatient">
+          <Button
+            color="primary"
+            variant="contained"
+          >
+            Cadastrar paciente
         </Button>
+        </Link>
       </Box>
       <Box mt={3}>
         <Card>
           <CardContent>
-            <Box maxWidth={500}>
+            <Box maxWidth={600} className={classes.boxSearch}>
               <TextField
                 fullWidth
                 InputProps={{
@@ -54,6 +63,13 @@ const Toolbar = ({ className, ...rest }) => {
                 placeholder="Buscar paciente pelo nome"
                 variant="outlined"
               />
+              <Button
+                color="primary"
+                variant="contained"
+                className={classes.buttonSearch}
+              >
+                BUSCAR
+        </Button>
 
             </Box>
 

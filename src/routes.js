@@ -4,10 +4,11 @@ import DashboardLayout from 'src/layouts/DashboardLayout';
 import MainLayout from 'src/layouts/MainLayout';
 import UserView from 'src/views/user/UserView';
 import PatientListView from 'src/views/patient/PatientListView';
+import NewPatient from 'src/views/patient/NewPatient';
 import DashboardView from 'src/views/reports/DashboardView';
 import LoginView from 'src/views/auth/LoginView';
 import NotFoundView from 'src/views/errors/NotFoundView';
-import ProductListView from 'src/views/product/ProductListView';
+import VaccinationView from 'src/views/vaccination/VaccinationView';
 import RegisterView from 'src/views/auth/RegisterView';
 import SettingsView from 'src/views/settings/SettingsView';
 
@@ -18,8 +19,9 @@ const routes = [
     children: [
       { path: 'user', element: <UserView /> },
       { path: 'patients', element: <PatientListView /> },
+      { path: 'newpatient', element: <NewPatient /> },
       { path: 'dashboard', element: <DashboardView /> },
-      { path: 'products', element: <ProductListView /> },
+      { path: 'vaccination', element: <VaccinationView /> },
       { path: 'settings', element: <SettingsView /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]

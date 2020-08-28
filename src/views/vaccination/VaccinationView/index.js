@@ -8,7 +8,7 @@ import {
 import { Pagination } from '@material-ui/lab';
 import Page from 'src/components/Page';
 import Toolbar from './Toolbar';
-import ProductCard from './ProductCard';
+import VaccinationCard from './VaccinationCard';
 import data from './data';
 
 const useStyles = makeStyles((theme) => ({
@@ -23,14 +23,14 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const ProductList = () => {
+const VaccinationList = () => {
   const classes = useStyles();
   const [products] = useState(data);
 
   return (
     <Page
       className={classes.root}
-      title="Products"
+      title="Vacinação"
     >
       <Container maxWidth={false}>
         <Toolbar />
@@ -47,7 +47,7 @@ const ProductList = () => {
                 md={6}
                 xs={12}
               >
-                <ProductCard
+                <VaccinationCard
                   className={classes.productCard}
                   product={product}
                 />
@@ -71,4 +71,4 @@ const ProductList = () => {
   );
 };
 
-export default ProductList;
+export default VaccinationList;

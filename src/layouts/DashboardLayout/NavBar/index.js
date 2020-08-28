@@ -48,7 +48,7 @@ const items = [
     title: 'PACIENTES'
   },
   {
-    href: '/app/products',
+    href: '/app/vaccination',
     icon: FileTextIcon,
     title: 'VACINAÇÃO'//PRODUCTS
   },

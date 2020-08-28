@@ -20,6 +20,12 @@ const useStyles = makeStyles((theme) => ({
   },
   exportButton: {
     marginRight: theme.spacing(1)
+  },
+  boxSearch: {
+    display: 'flex'
+  },
+  buttonSearch: {
+    marginLeft: theme.spacing(2)
   }
 }));
 
@@ -31,27 +37,11 @@ const Toolbar = ({ className, ...rest }) => {
       className={clsx(classes.root, className)}
       {...rest}
     >
-      <Box
-        display="flex"
-        justifyContent="flex-end"
-      >
-        <Button className={classes.importButton}>
-          Import
-        </Button>
-        <Button className={classes.exportButton}>
-          Export
-        </Button>
-        <Button
-          color="primary"
-          variant="contained"
-        >
-          Add product
-        </Button>
-      </Box>
       <Box mt={3}>
         <Card>
           <CardContent>
-            <Box maxWidth={500}>
+            <h5>Buscar pelo Nº do SUS ou CPF</h5>
+            <Box maxWidth={500} className={classes.boxSearch}>
               <TextField
                 fullWidth
                 InputProps={{
@@ -66,9 +56,16 @@ const Toolbar = ({ className, ...rest }) => {
                     </InputAdornment>
                   )
                 }}
-                placeholder="Search product"
+                placeholder="Buscar ficha de vacinação do paciente"
                 variant="outlined"
               />
+              <Button
+                color="primary"
+                variant="contained"
+                className={classes.buttonSearch}
+              >
+                BUSCAR
+        </Button>
             </Box>
           </CardContent>
         </Card>

@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Results = ({className, customers, ...rest}) => {
+const Results = ({ className, customers, ...rest }) => {
   const classes = useStyles();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
@@ -31,8 +31,8 @@ const Results = ({className, customers, ...rest}) => {
 
   return (
     <Card
-    className={clsx(classes.root, className)}
-    {...rest}
+      className={clsx(classes.root, className)}
+      {...rest}
     >
       <PerfectScrollbar>
         <Box minWidth={1050}>
@@ -47,6 +47,9 @@ const Results = ({className, customers, ...rest}) => {
                 </TableCell>
                 <TableCell>
                   IDADE
+                </TableCell>
+                <TableCell>
+                  SEXO
                 </TableCell>
                 <TableCell>
                   CPF
@@ -64,25 +67,25 @@ const Results = ({className, customers, ...rest}) => {
             </TableHead>
             <TableBody>
               {customers.slice(0, limit).map((customer) => (
-      <TableRow
-      hover
-      key={customer.id}
-      >
+                <TableRow
+                  hover
+                  key={customer.id}
+                >
                   <TableCell padding="checkbox">
                     <IconButton color="primary">
-                    <Edit/>
+                      <Edit />
                     </IconButton>
                   </TableCell>
                   <TableCell>
                     <Box
-      alignItems="center"
-      display="flex"
-      >                    
-                        { /*getInitials(customer.name)*/ }
+                      alignItems="center"
+                      display="flex"
+                    >
+                      { /*getInitials(customer.name)*/}
                       <Typography
-      color="textPrimary"
-      variant="body1"
-      >
+                        color="textPrimary"
+                        variant="body1"
+                      >
                         {customer.name}
                       </Typography>
                     </Box>
@@ -100,22 +103,22 @@ const Results = ({className, customers, ...rest}) => {
                     {moment(customer.createdAt).format('DD/MM/YYYY')}
                   </TableCell>
                 </TableRow>
-    ))}
+              ))}
             </TableBody>
           </Table>
         </Box>
       </PerfectScrollbar>
       <TablePagination
-    component="div"
-    count={customers.length}
-    onChangePage={handlePageChange}
-    onChangeRowsPerPage={handleLimitChange}
-    page={page}
-    rowsPerPage={limit}
-    rowsPerPageOptions={[5, 10, 25]}
-    />
+        component="div"
+        count={customers.length}
+        onChangePage={handlePageChange}
+        onChangeRowsPerPage={handleLimitChange}
+        page={page}
+        rowsPerPage={limit}
+        rowsPerPageOptions={[5, 10, 25]}
+      />
     </Card>
-    );
+  );
 };
 
 Results.propTypes = {

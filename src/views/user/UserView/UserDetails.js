@@ -16,7 +16,7 @@ import {
   TextField, Box, Card, Table, TableBody, TableCell, TableHead, TableRow, Typography, makeStyles, IconButton
 } from '@material-ui/core';
 
-const states = [
+const userType = [
   {
     value: 'Enfermeiro(a)',
     label: 'Enfermeiro(a)'
@@ -28,6 +28,21 @@ const states = [
   {
     value: 'Diretor',
     label: 'Diretor'
+  }
+];
+
+const serviceStation = [
+  {
+    value: 'UPA',
+    label: 'UPA'
+  },
+  {
+    value: 'POSTO SAO CRISTOVÃO',
+    label: 'POSTO SAO CRISTOVÃO'
+  },
+  {
+    value: 'ATENDIMENTO EM CAMPO',
+    label: 'ATENDIMENTO EM CAMPO'
   }
 ];
 
@@ -50,7 +65,7 @@ const UserDetails = ({ className, ...rest }) => {
   };
 
   function toTop() {
-    alert('deu certo')
+    console.log('top')
   }
 
   return (
@@ -90,13 +105,28 @@ const UserDetails = ({ className, ...rest }) => {
               </Grid>
               <Grid
                 item
-                md={6}
+                md={3}
                 xs={12}
               >
                 <TextField
                   fullWidth
-                  label="Sobrenome"
-                  name="lastName"
+                  label="Login"
+                  name="login"
+                  onChange={handleChange}
+                  required
+                  value={values.lastName}
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid
+                item
+                md={3}
+                xs={12}
+              >
+                <TextField
+                  fullWidth
+                  label="Senha"
+                  name="password"
                   onChange={handleChange}
                   required
                   value={values.lastName}
@@ -195,7 +225,7 @@ const UserDetails = ({ className, ...rest }) => {
                   value={values.state}
                   variant="outlined"
                 >
-                  {states.map((option) => (
+                  {userType.map((option) => (
                     <option
                       key={option.value}
                       value={option.value}
@@ -222,7 +252,7 @@ const UserDetails = ({ className, ...rest }) => {
                   value={values.state}
                   variant="outlined"
                 >
-                  {states.map((option) => (
+                  {serviceStation.map((option) => (
                     <option
                       key={option.value}
                       value={option.value}
