@@ -16,6 +16,8 @@ import {
   IconButton,
 } from '@material-ui/core';
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,94 +32,136 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+const sexo = [
+  {
+    value: 'Masculino',
+    label: 'Masculino'
+  },
+  {
+    value: 'Feminino',
+    label: 'Feminino'
+  }
+]
+
+const bloodType = [
+  {
+    value: 'Sangue A+',
+    label: 'Sangue A+'
+  },
+  {
+    value: 'Sangue A-',
+    label: 'Sangue A-'
+  },
+  {
+    value: 'Sangue B+',
+    label: 'Sangue B+'
+  },
+  {
+    value: 'Sangue B-',
+    label: 'Sangue B-'
+  },
+  {
+    value: 'Sangue AB+',
+    label: 'Sangue AB+'
+  },
+  {
+    value: 'Sangue AB-',
+    label: 'Sangue AB-'
+  },
+  {
+    value: 'Sangue O+',
+    label: 'Sangue O+'
+  },
+  {
+    value: 'Sangue O-',
+    label: 'Sangue O-'
+  }
+]
+
+const colors = [
+  {
+    value: 'Branco(a)',
+    label: 'Branco(a)'
+  },
+  {
+    value: 'Pardo(a)',
+    label: 'Pardo(a)'
+  },
+  {
+    value: 'Amarelo(a)',
+    label: 'Amarelo(a)'
+  },
+  {
+    value: 'Negro(a)',
+    label: 'Negro(a)'
+  }
+  ,
+  {
+    value: 'Índio(a)',
+    label: 'Índio(a)'
+  }
+];
+
 
 const NewPatient = ({ className, ...rest }) => {
+  const notifySucess = () => toast.success("Paciente cadastrado com sucesso!");
+  const notifyError = () => toast.error("Ocorreu um erro ao realizar cadastro!");
   const classes = useStyles();
-  const [values, setValues] = useState({
-  });
 
-  const handleChange = (event) => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value
-    });
-  };
+  const [name, setName] = useState('')
+  const [color, setColor] = useState('Branco(a)')
+  const [sex, setSex] = useState('Masculino')
+  const [typeBlood, setTypeBlood] = useState('Sangue A+')
+  const [sus, setSus] = useState('')
+  const [cpf, setCpf] = useState('')
+  const [rg, setRg] = useState('')
+  const [birthDate, setBirthDate] = useState('')
+  const [phone, setPhone] = useState('')
+  const [adress, setAdress] = useState('')
+  const [district, setDistrict] = useState('')
+  const [city, setCity] = useState('')
+  const [number, setNumber] = useState('')
+  const [motherName, setMotherName] = useState('')
+  const [fatherName, setFatherName] = useState('')
+  const [notes, setNotes] = useState('')
+  const [specialPatient, setSpecialPatient] = useState(false)
+  const [active, setActive] = useState(false)
 
-  const sexo = [
-    {
-      value: 'Masculino',
-      label: 'Masculino'
-    },
-    {
-      value: 'Feminino',
-      label: 'Feminino'
+  async function handleSubmitPatientForm(e) {
+    e.preventDefault()
+    try {
+      console.log(
+        name,
+        color,
+        sex,
+        typeBlood,
+        sus,
+        cpf,
+        rg,
+        birthDate,
+        phone,
+        adress,
+        district,
+        city,
+        number,
+        motherName,
+        fatherName,
+        notes,
+        specialPatient,
+        active,
+      )
+      notifySucess()
+    } catch (error) {
+      notifyError()
     }
-  ]
 
-  const bloodType = [
-    {
-      value: 'Sangue A+',
-      label: 'Sangue A+'
-    },
-    {
-      value: 'Sangue A-',
-      label: 'Sangue A-'
-    },
-    {
-      value: 'Sangue B+',
-      label: 'Sangue B+'
-    },
-    {
-      value: 'Sangue B-',
-      label: 'Sangue B-'
-    },
-    {
-      value: 'Sangue AB+',
-      label: 'Sangue AB+'
-    },
-    {
-      value: 'Sangue AB-',
-      label: 'Sangue AB-'
-    },
-    {
-      value: 'Sangue O+',
-      label: 'Sangue O+'
-    },
-    {
-      value: 'Sangue O-',
-      label: 'Sangue O-'
-    }
-  ]
-
-  const colors = [
-    {
-      value: 'Branco(a)',
-      label: 'Branco(a)'
-    },
-    {
-      value: 'Pardo(a)',
-      label: 'Pardo(a)'
-    },
-    {
-      value: 'Amarelo(a)',
-      label: 'Amarelo(a)'
-    },
-    {
-      value: 'Negro(a)',
-      label: 'Negro(a)'
-    }
-    ,
-    {
-      value: 'Índio(a)',
-      label: 'Índio(a)'
-    }
-  ];
+  }
 
   return (
     <>
       <form
+        onSubmit={handleSubmitPatientForm}
         autoComplete="off"
-        noValidate
         className={clsx(classes.root)}
         {...rest}
       >
@@ -146,9 +190,9 @@ const NewPatient = ({ className, ...rest }) => {
                   fullWidth
                   label="Nome completo"
                   name="name"
-                  onChange={handleChange}
+                  onChange={e => setName(e.target.value)}
                   required
-                  value={values.firstName}
+                  value={name}
                   variant="outlined"
                 />
               </Grid>
@@ -161,7 +205,8 @@ const NewPatient = ({ className, ...rest }) => {
                   fullWidth
                   label="Cor"
                   name="color"
-                  onChange={handleChange}
+                  value={color}
+                  onChange={e => setColor(e.target.value)}
                   required
                   select
                   SelectProps={{ native: true }}
@@ -185,8 +230,9 @@ const NewPatient = ({ className, ...rest }) => {
                 <TextField
                   fullWidth
                   label="Sexo"
+                  value={sex}
                   name="sexo"
-                  onChange={handleChange}
+                  onChange={e => setSex(e.target.value)}
                   required
                   select
                   SelectProps={{ native: true }}
@@ -211,7 +257,8 @@ const NewPatient = ({ className, ...rest }) => {
                   fullWidth
                   label="Tipo sanguineo"
                   name="blood"
-                  onChange={handleChange}
+                  value={typeBlood}
+                  onChange={e => setTypeBlood(e.target.value)}
                   required
                   select
                   SelectProps={{ native: true }}
@@ -237,9 +284,9 @@ const NewPatient = ({ className, ...rest }) => {
                   fullWidth
                   label="Nº SUS"
                   name="nsus"
-                  onChange={handleChange}
+                  onChange={e => setSus(e.target.value)}
                   required
-                  value={values.lastName}
+                  value={sus}
                   variant="outlined"
                 />
               </Grid>
@@ -252,8 +299,9 @@ const NewPatient = ({ className, ...rest }) => {
                   type="number"
                   fullWidth
                   label="CPF"
-                  name="email"
-                  onChange={handleChange}
+                  value={cpf}
+                  name="cpf"
+                  onChange={e => setCpf(e.target.value)}
                   required
                   variant="outlined"
                 />
@@ -267,9 +315,9 @@ const NewPatient = ({ className, ...rest }) => {
                   type="number"
                   fullWidth
                   label="RG"
+                  value={rg}
                   name="rg"
-                  onChange={handleChange}
-                  required
+                  onChange={e => setRg(e.target.value)}
                   variant="outlined"
                 />
               </Grid>
@@ -279,12 +327,13 @@ const NewPatient = ({ className, ...rest }) => {
                 xs={12}
               >
                 <TextField
+                  required
                   fullWidth
-                  helperText="Data de nascimento"
+                  helperText="Data de nascimento *"
                   name="datenasc"
-                  onChange={handleChange}
+                  onChange={e => setBirthDate(e.target.value)}
                   type="date"
-                  value={values.phone}
+                  value={birthDate}
                   variant="outlined"
                 />
               </Grid>
@@ -298,9 +347,8 @@ const NewPatient = ({ className, ...rest }) => {
                   type="number"
                   label="Telefone de contato"
                   name="phone"
-                  onChange={handleChange}
-                  required
-                  value={values.country}
+                  onChange={e => setPhone(e.target.value)}
+                  value={phone}
                   variant="outlined"
                 />
               </Grid>
@@ -312,10 +360,10 @@ const NewPatient = ({ className, ...rest }) => {
                 <TextField
                   fullWidth
                   label="Endereço"
-                  name="adress2"
-                  onChange={handleChange}
+                  name="adress"
+                  onChange={e => setAdress(e.target.value)}
                   required
-                  value={values.country}
+                  value={adress}
                   variant="outlined"
                 />
               </Grid>
@@ -327,10 +375,10 @@ const NewPatient = ({ className, ...rest }) => {
                 <TextField
                   fullWidth
                   label="Bairro"
-                  name="adress"
-                  onChange={handleChange}
+                  name="district"
+                  onChange={e => setDistrict(e.target.value)}
                   required
-                  value={values.country}
+                  value={district}
                   variant="outlined"
                 />
               </Grid>
@@ -343,9 +391,9 @@ const NewPatient = ({ className, ...rest }) => {
                   fullWidth
                   label="Cidade"
                   name="city"
-                  onChange={handleChange}
+                  onChange={e => setCity(e.target.value)}
                   required
-                  value={values.country}
+                  value={city}
                   variant="outlined"
                 />
               </Grid>
@@ -358,9 +406,9 @@ const NewPatient = ({ className, ...rest }) => {
                   fullWidth
                   label="Numero"
                   name="number"
-                  onChange={handleChange}
+                  onChange={e => setNumber(e.target.value)}
                   required
-                  value={values.country}
+                  value={number}
                   variant="outlined"
                 />
               </Grid>
@@ -373,7 +421,8 @@ const NewPatient = ({ className, ...rest }) => {
                   fullWidth
                   label="Nome da mãe"
                   name="mothername"
-                  onChange={handleChange}
+                  onChange={e => setMotherName(e.target.value)}
+                  value={motherName}
                   required
                   variant="outlined"
                 />
@@ -387,8 +436,8 @@ const NewPatient = ({ className, ...rest }) => {
                   fullWidth
                   label="Nome do pai"
                   name="fathername"
-                  onChange={handleChange}
-                  required
+                  value={fatherName}
+                  onChange={e => setFatherName(e.target.value)}
                   variant="outlined"
                 />
               </Grid>
@@ -400,22 +449,23 @@ const NewPatient = ({ className, ...rest }) => {
                 <TextField
                   fullWidth
                   label="Observação"
+                  value={notes}
                   name="obs"
-                  onChange={handleChange}
+                  onChange={e => setNotes(e.target.value)}
                   variant="outlined"
                 />
               </Grid>
 
               <Grid item xs={12} sm={2}>
                 <FormControlLabel
-                  control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
+                  control={<Checkbox onChange={() => (setSpecialPatient(!specialPatient))} color="secondary" name="saveAddress" checke={specialPatient} value={specialPatient} />}
                   label="Paciente especial"
                 />
               </Grid>
 
               <Grid item xs={12} sm={2}>
                 <FormControlLabel
-                  control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
+                  control={<Checkbox onChange={() => (setActive(!active))} color="secondary" name="saveAddress" checked={active} value={active} />}
                   label="Inativo"
                 />
               </Grid>
@@ -431,6 +481,7 @@ const NewPatient = ({ className, ...rest }) => {
             <Button
               color="primary"
               variant="contained"
+              type="submit"
             >
               Gravar
           </Button>
@@ -438,6 +489,17 @@ const NewPatient = ({ className, ...rest }) => {
         </Card>
 
       </form>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   );
 };
