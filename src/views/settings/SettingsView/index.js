@@ -5,7 +5,7 @@ import {
   makeStyles
 } from '@material-ui/core';
 import Page from 'src/components/Page';
-import Notifications from './Notifications';
+import FormPostService from './FormPostService';
 import Password from './Password';
 
 const useStyles = makeStyles((theme) => ({
@@ -26,7 +26,7 @@ const SettingsView = () => {
       title="Ajustes"
     >
       <Container maxWidth="lg">
-        <Notifications />
+        <FormPostService />
         <Box mt={3}>
           <Password />
         </Box>

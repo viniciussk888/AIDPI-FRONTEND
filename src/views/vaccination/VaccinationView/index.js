@@ -5,7 +5,7 @@ import {
   Grid,
   makeStyles
 } from '@material-ui/core';
-import { Pagination } from '@material-ui/lab';
+//import { Pagination } from '@material-ui/lab';
 import Page from 'src/components/Page';
 import Toolbar from './Toolbar';
 import VaccinationCard from './VaccinationCard';
@@ -39,23 +39,20 @@ const VaccinationList = () => {
             container
             spacing={3}
           >
-            {products.map((product) => (
-              <Grid
-                item
-                key={product.id}
-                lg={4}
-                md={6}
-                xs={12}
-              >
-                <VaccinationCard
-                  className={classes.productCard}
-                  product={product}
-                />
-              </Grid>
-            ))}
+            <Grid
+              item
+              lg={12}
+              md={12}
+              xs={12}
+            >
+              <VaccinationCard
+                className={classes.productCard}
+                product={products}
+              />
+            </Grid>
           </Grid>
         </Box>
-        <Box
+        {/*<Box
           mt={3}
           display="flex"
           justifyContent="center"
@@ -65,7 +62,7 @@ const VaccinationList = () => {
             count={3}
             size="small"
           />
-        </Box>
+        </Box>*/}
       </Container>
     </Page>
   );

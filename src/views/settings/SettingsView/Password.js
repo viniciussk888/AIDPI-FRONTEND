@@ -11,6 +11,7 @@ import {
   TextField,
   makeStyles
 } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles(({
   root: {}
@@ -18,51 +19,57 @@ const useStyles = makeStyles(({
 
 const Password = ({ className, ...rest }) => {
   const classes = useStyles();
-  const [values, setValues] = useState({
-    password: '',
-    confirm: ''
-  });
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [alertErro, setAlertError] = useState(false)
 
-  const handleChange = (event) => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value
-    });
-  };
+
+  async function handleUpdatePassword(e) {
+    e.preventDefault()
+    if (password !== confirmPassword) {
+      return setAlertError(true)
+    }
+    console.log(
+      password
+    )
+    setAlertError(false)
+  }
 
   return (
     <form
+      onSubmit={handleUpdatePassword}
       className={clsx(classes.root, className)}
       {...rest}
     >
       <Card>
         <CardHeader
-          subheader="Update password"
-          title="Password"
+          subheader="Atualizar senha de usuário"
+          title="Senha"
         />
         <Divider />
         <CardContent>
           <TextField
             fullWidth
-            label="Password"
+            label="Senha"
             margin="normal"
             name="password"
-            onChange={handleChange}
+            onChange={e => setPassword(e.target.value)}
             type="password"
-            value={values.password}
+            value={password}
             variant="outlined"
           />
           <TextField
             fullWidth
-            label="Confirm password"
+            label="Confirmar senha"
             margin="normal"
             name="confirm"
-            onChange={handleChange}
+            onChange={e => setConfirmPassword(e.target.value)}
             type="password"
-            value={values.confirm}
+            value={confirmPassword}
             variant="outlined"
           />
         </CardContent>
+        {alertErro && <Alert severity="error">As senhas não conferem!</Alert>}
         <Divider />
         <Box
           display="flex"
@@ -72,8 +79,9 @@ const Password = ({ className, ...rest }) => {
           <Button
             color="primary"
             variant="contained"
+            type="submit"
           >
-            Update
+            Atualizar
           </Button>
         </Box>
       </Card>

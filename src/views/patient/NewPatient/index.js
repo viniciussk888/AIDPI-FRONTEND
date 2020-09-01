@@ -112,6 +112,9 @@ const NewPatient = ({ className, ...rest }) => {
   const [color, setColor] = useState('Branco(a)')
   const [sex, setSex] = useState('Masculino')
   const [typeBlood, setTypeBlood] = useState('Sangue A+')
+  const [weight, setWeight] = useState('')
+  const [length, setLength] = useState('')
+  const [tax, setTax] = useState('')
   const [sus, setSus] = useState('')
   const [cpf, setCpf] = useState('')
   const [rg, setRg] = useState('')
@@ -135,6 +138,9 @@ const NewPatient = ({ className, ...rest }) => {
         color,
         sex,
         typeBlood,
+        weight,
+        length,
+        tax,
         sus,
         cpf,
         rg,
@@ -276,7 +282,51 @@ const NewPatient = ({ className, ...rest }) => {
               </Grid>
               <Grid
                 item
-                md={3}
+                md={1}
+                xs={12}
+              >
+                <TextField
+                  type="number"
+                  fullWidth
+                  label="Peso"
+                  name="weight"
+                  onChange={e => setWeight(e.target.value)}
+                  value={weight}
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid
+                item
+                md={1}
+                xs={12}
+              >
+                <TextField
+                  type="number"
+                  fullWidth
+                  label="Comp."
+                  name="length"
+                  onChange={e => setLength(e.target.value)}
+                  value={length}
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid
+                item
+                md={1}
+                xs={12}
+              >
+                <TextField
+                  fullWidth
+                  label="T.áx"
+                  name="tax"
+                  onChange={e => setTax(e.target.value)}
+                  value={tax}
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid
+                item
+                md={2}
                 xs={12}
               >
                 <TextField
@@ -292,7 +342,7 @@ const NewPatient = ({ className, ...rest }) => {
               </Grid>
               <Grid
                 item
-                md={3}
+                md={2}
                 xs={12}
               >
                 <TextField
@@ -308,7 +358,7 @@ const NewPatient = ({ className, ...rest }) => {
               </Grid>
               <Grid
                 item
-                md={3}
+                md={2}
                 xs={12}
               >
                 <TextField
