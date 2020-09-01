@@ -2,15 +2,15 @@ import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Bar } from 'react-chartjs-2';
-import { Box, Button, Card, CardContent, CardHeader, Divider, useTheme, makeStyles, colors } from '@material-ui/core';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import { Box, Card, CardContent, CardHeader, Divider, useTheme, makeStyles, colors } from '@material-ui/core';
+//import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 //import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 
 const useStyles = makeStyles(() => ({
   root: {}
 }));
 
-const Graphic = ({className, ...rest}) => {
+const Graphic = ({ className, ...rest }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -19,15 +19,15 @@ const Graphic = ({className, ...rest}) => {
       {
         backgroundColor: colors.indigo[500],
         data: [18, 5, 19, 27, 29, 19, 20],
-        label: 'This year'
+        label: 'Esse ano'
       },
       {
         backgroundColor: colors.grey[200],
         data: [11, 20, 12, 29, 30, 25, 13],
-        label: 'Last year'
+        label: 'Ano anterior'
       }
     ],
-    labels: ['1 Aug', '2 Aug', '3 Aug', '4 Aug', '5 Aug', '6 Aug']
+    labels: ['DIARREIA', 'INF. URINÁRIA', 'DESNUTRIÇÃO', 'VERMINOSE', 'PNEUMONIA', 'ASMA BRÔNQUICA']
   };
 
   const options = {
@@ -91,39 +91,30 @@ const Graphic = ({className, ...rest}) => {
 
   return (
     <Card
-    className={clsx(classes.root, className)}
-    {...rest}
+      className={clsx(classes.root, className)}
+      {...rest}
     >
       <CardHeader
-    action={(
-    <Button
-    endIcon={<ArrowDropDownIcon />}
-    size="small"
-    variant="text"
-    >
-            Ultimos 7 dias
-          </Button>
-    )}
-    title="Ultimos resultados"
-    />
+        title="Resultados"
+      />
       <Divider />
       <CardContent>
         <Box
-    height={400}
-    position="relative"
-    >
+          height={400}
+          position="relative"
+        >
           <Bar
-    data={data}
-    options={options}
-    />
+            data={data}
+            options={options}
+          />
         </Box>
       </CardContent>
       <Divider />
       <Box
-    display="flex"
-    justifyContent="flex-end"
-    p={2}
-    >
+        display="flex"
+        justifyContent="flex-end"
+        p={2}
+      >
         { /*<Button
     color="primary"
     endIcon={<ArrowRightIcon />}
@@ -134,7 +125,7 @@ const Graphic = ({className, ...rest}) => {
         </Button>*/ }
       </Box>
     </Card>
-    );
+  );
 };
 
 Graphic.propTypes = {
