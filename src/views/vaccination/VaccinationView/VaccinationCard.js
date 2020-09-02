@@ -7,7 +7,11 @@ import {
   Divider,
   CardContent,
   makeStyles,
-  IconButton
+  IconButton,
+  Typography,
+  Grid,
+  TextField,
+  Button
 } from '@material-ui/core';
 import Edit from "@material-ui/icons/Edit"
 import Table from '@material-ui/core/Table';
@@ -16,6 +20,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+
+import ModalComponent from '../../../components/ModalComponent'
 
 const useStyles = makeStyles({
   table: {
@@ -63,9 +69,51 @@ const rows = [
 
 
 const VaccinationCard = ({ className, product, ...rest }) => {
+  const [open, setOpen] = React.useState(false);
+  const [vaccine, setVaccine] = React.useState('');
+  function showModal(vaccine) {
+    setOpen(!open)
+    setVaccine(vaccine)
+  }
   const classes = useStyles();
+  const body = (
+    <>
+      <React.Fragment>
+        <Typography variant="h4" gutterBottom>
+          VACINA: {vaccine}
+        </Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              variant="outlined"
+              type="date"
+              required
+              id="date"
+              name="date"
+              helperText="Data de aplicação"
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              variant="outlined"
+              id="responsavel"
+              name="responsavel"
+              label="Responsavel"
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Button color="primary" variant="contained">CONFIRMAR VACINAÇÃO</Button>
+          </Grid>
+        </Grid>
+      </React.Fragment>
+    </>
+  );
+
   return (
     <>
+      {open ? <ModalComponent open={true} body={body} vacinne={vaccine} /> : null}
       <Paper elevation={3}>
         <Card>
           <CardHeader
@@ -95,9 +143,10 @@ const VaccinationCard = ({ className, product, ...rest }) => {
                       <TableCell align="">{row.fat}</TableCell>
                       <TableCell align="">{row.carbs}</TableCell>
                       <TableCell align="right">
-                        <IconButton >
+                        {!row.calories && <IconButton onClick={() => { showModal(row.name) }}>
                           <Edit className={classes.editButton} color="primary" />
-                        </IconButton>
+                        </IconButton>}
+
                       </TableCell>
                     </TableRow>
                   ))}
