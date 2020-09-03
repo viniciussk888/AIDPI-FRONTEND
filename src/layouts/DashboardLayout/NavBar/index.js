@@ -38,7 +38,7 @@ const items = [
     title: 'INÍCIO'
   },
   {
-    href: '/app/products',
+    href: '/app/aidpi',
     icon: ClipboardIcon,
     title: 'AIDPI'//PRODUCTS
   },

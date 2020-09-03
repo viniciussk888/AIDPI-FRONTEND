@@ -22,6 +22,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 import ModalComponent from '../../../components/ModalComponent'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const useStyles = makeStyles({
   table: {
@@ -69,13 +71,29 @@ const rows = [
 
 
 const VaccinationCard = ({ className, product, ...rest }) => {
+  const notifySucess = () => toast.success("Operação realizada com sucesso!");
+  const notifyError = () => toast.error("Ocorreu um erro ao realizar na operação!");
+  const classes = useStyles();
+
   const [open, setOpen] = React.useState(false);
   const [vaccine, setVaccine] = React.useState('');
   function showModal(vaccine) {
     setOpen(!open)
     setVaccine(vaccine)
   }
-  const classes = useStyles();
+
+
+  async function handleApplyVaccine(e) {
+    e.preventDefault()
+    try {
+      console.log('a')
+      notifySucess()
+    } catch (error) {
+      notifyError()
+    }
+
+  }
+
   const body = (
     <>
       <React.Fragment>
@@ -99,12 +117,18 @@ const VaccinationCard = ({ className, product, ...rest }) => {
               variant="outlined"
               id="responsavel"
               name="responsavel"
-              label="Responsavel"
+              label="Responsável"
               fullWidth
             />
           </Grid>
           <Grid item xs={12} sm={4}>
-            <Button color="primary" variant="contained">CONFIRMAR VACINAÇÃO</Button>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={handleApplyVaccine}
+            >
+              CONFIRMAR VACINAÇÃO
+              </Button>
           </Grid>
         </Grid>
       </React.Fragment>
@@ -129,7 +153,7 @@ const VaccinationCard = ({ className, product, ...rest }) => {
                     <TableCell>VACINA</TableCell>
                     <TableCell align="">SITUAÇÃO</TableCell>
                     <TableCell align="">DATA</TableCell>
-                    <TableCell align="">RESPONSAVEL</TableCell>
+                    <TableCell align="">RESPONSÁVEL</TableCell>
                     <TableCell align="right">APLICAR</TableCell>
                   </TableRow>
                 </TableHead>
@@ -154,8 +178,17 @@ const VaccinationCard = ({ className, product, ...rest }) => {
               </Table>
             </TableContainer>
           </CardContent>
-
-
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
         </Card>
 
       </Paper>

@@ -43,6 +43,7 @@ const Toolbar = ({ className, ...rest }) => {
             <h5 className={classes.font}>Buscar pelo Nº do SUS ou CPF</h5>
             <Box maxWidth={500} className={classes.boxSearch}>
               <TextField
+                type="number"
                 fullWidth
                 InputProps={{
                   startAdornment: (

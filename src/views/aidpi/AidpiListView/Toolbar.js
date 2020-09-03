@@ -142,12 +142,12 @@ const Toolbar = ({ className, ...rest }) => {
         display="flex"
         justifyContent="flex-end"
       >
-        <Link to="/app/newpatient">
+        <Link to="/app/newaidpi">
           <Button
             color="primary"
             variant="contained"
           >
-            Cadastrar paciente
+            REALIZAR CONSULTA
         </Button>
         </Link>
       </Box>

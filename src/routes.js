@@ -11,6 +11,8 @@ import NotFoundView from 'src/views/errors/NotFoundView';
 import VaccinationView from 'src/views/vaccination/VaccinationView';
 import RegisterView from 'src/views/auth/RegisterView';
 import SettingsView from 'src/views/settings/SettingsView';
+import AidpiListView from 'src/views/aidpi/AidpiListView';
+import NewAidpi from 'src/views/aidpi/NewAidpi';
 
 const routes = [
   {
@@ -20,6 +22,8 @@ const routes = [
       { path: 'user', element: <UserView /> },
       { path: 'patients', element: <PatientListView /> },
       { path: 'newpatient', element: <NewPatient /> },
+      { path: 'aidpi', element: <AidpiListView /> },
+      { path: 'newaidpi', element: <NewAidpi /> },
       { path: 'dashboard', element: <DashboardView /> },
       { path: 'vaccination', element: <VaccinationView /> },
       { path: 'settings', element: <SettingsView /> },

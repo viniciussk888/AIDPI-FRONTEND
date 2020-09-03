@@ -22,6 +22,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Delete from '@material-ui/icons/Delete';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const useStyles = makeStyles(({
   root: {},
@@ -51,6 +53,8 @@ const rows = [
 ];
 
 const FormPostService = ({ className, ...rest }) => {
+  const notifySucess = () => toast.success("Operação realizada com sucesso!");
+  const notifyError = () => toast.error("Ocorreu um erro ao realizar na operação!");
   const classes = useStyles();
 
   const [name, setName] = useState('')
@@ -60,12 +64,16 @@ const FormPostService = ({ className, ...rest }) => {
 
   async function handleCreatePostService(e) {
     e.preventDefault()
-    console.log(
-      name,
-      district,
-      adress,
-      city
-    )
+    try {
+      console.log(
+        name,
+        district,
+        adress,
+        city)
+      notifySucess()
+    } catch (error) {
+      notifyError()
+    }
   }
 
   return (
@@ -195,8 +203,17 @@ const FormPostService = ({ className, ...rest }) => {
 
           </Grid>
         </CardContent>
-
-
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </Card>
     </form>
   );
