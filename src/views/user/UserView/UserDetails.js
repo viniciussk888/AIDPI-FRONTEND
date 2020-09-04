@@ -16,7 +16,7 @@ import {
 } from '@material-ui/core';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { useSelector } from 'react-redux';
 import api from '../../../services/api'
 
 const userType = [
@@ -31,21 +31,6 @@ const userType = [
   {
     value: 'Diretor',
     label: 'Diretor'
-  }
-];
-
-const serviceStationArray = [
-  {
-    value: 'UPA',
-    label: 'UPA'
-  },
-  {
-    value: 'POSTO SAO CRISTOVÃO',
-    label: 'POSTO SAO CRISTOVÃO'
-  },
-  {
-    value: 'ATENDIMENTO EM CAMPO',
-    label: 'ATENDIMENTO EM CAMPO'
   }
 ];
 
@@ -68,6 +53,7 @@ const UserDetails = ({ className, ...rest }) => {
   const [control, setControl] = useState(false)
 
   const [users, setUsers] = useState([])
+  const [servicesStations, setServicesStations] = useState([])
 
   const [id, setId] = useState('')
   const [name, setName] = useState('')
@@ -85,8 +71,20 @@ const UserDetails = ({ className, ...rest }) => {
   const [active, setActive] = useState(true)
 
   const config = {
-    headers: { Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjMsImlhdCI6MTU5OTE4MTg0OX0.eOrfm0WKTJXpXDqmQIIYCpMEqGfHb1ZMngwK3i1ppZU` }
+    headers: { Authorization: `Bearer ${useSelector(state => state.token)}` }
   };
+
+  useEffect(() => {
+    async function fetchServiceStation() {
+      try {
+        const response = await api.get('servicesstations', config)
+        setServicesStations(response.data)
+      } catch (error) {
+        notifyError()
+      }
+    }
+    fetchServiceStation()
+  }, [])
 
   useEffect(() => {
     async function fetchUsers() {
@@ -98,13 +96,13 @@ const UserDetails = ({ className, ...rest }) => {
       }
     }
     fetchUsers()
-  }, [controlUpdate, control])
+  }, [controlUpdate, control, config])
 
   async function handleSubmitUserForm(e) {
     e.preventDefault()
 
     try {
-      const response = await api.post(`users`, {
+      await api.post(`users`, {
         name: name,
         username: username,
         password: password,
@@ -131,7 +129,7 @@ const UserDetails = ({ className, ...rest }) => {
       return alert("Defina uma senha!")
     }
     try {
-      const response = await api.put(`users/${id}`, {
+      await api.put(`users/${id}`, {
         name: name,
         username: username,
         password: password,
@@ -155,7 +153,7 @@ const UserDetails = ({ className, ...rest }) => {
   }
   async function deleteUser(id) {
     var r = window.confirm("Confirma DELETAR PERMANENTEMENTE o usuário?");
-    if (r == true) {
+    if (r === true) {
       try {
         await api.delete(`users/${id}`, config)
         notifySucess()
@@ -371,12 +369,12 @@ const UserDetails = ({ className, ...rest }) => {
                   value={serviceStation}
                   variant="outlined"
                 >
-                  {serviceStationArray.map((option) => (
+                  {servicesStations.map((option) => (
                     <option
-                      key={option.value}
-                      value={option.value}
+                      key={option.name}
+                      value={option.name}
                     >
-                      {option.label}
+                      {option.name}
                     </option>
                   ))}
                 </TextField>

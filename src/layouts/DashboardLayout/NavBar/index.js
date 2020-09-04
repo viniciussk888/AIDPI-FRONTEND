@@ -23,12 +23,12 @@ import {
   FileText as FileTextIcon
 } from 'react-feather';
 import AccountCircle from '@material-ui/icons/AccountCircle'
+import AddLocation from '@material-ui/icons/AddLocation'
 import NavItem from './NavItem';
+import { useSelector } from 'react-redux';
 
 const user = {
   avatar: <AccountCircle />,
-  jobTitle: 'Enfermeiro(a)',
-  name: 'Katarina Smith'
 };
 
 const items = [
@@ -92,12 +92,18 @@ const useStyles = makeStyles(() => ({
     cursor: 'pointer',
     width: 64,
     height: 64
+  },
+  Icon: {
+    fontSize: 15
   }
 }));
 
 const NavBar = ({ onMobileClose, openMobile }) => {
   const classes = useStyles();
   const location = useLocation();
+  const jobTitle = useSelector(state => state.office)
+  const name = useSelector(state => state.name)
+  const serviceStation = useSelector(state => state.serviceStation)
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
@@ -129,13 +135,18 @@ const NavBar = ({ onMobileClose, openMobile }) => {
           color="textPrimary"
           variant="h5"
         >
-          {user.name}
+          {name}
         </Typography>
         <Typography
           color="textSecondary"
           variant="body2"
         >
-          {user.jobTitle}
+          {jobTitle}
+        </Typography> <Typography
+          color="textPrimary"
+          variant="body2"
+        >
+          <AddLocation className={classes.Icon} /> {serviceStation}
         </Typography>
       </Box>
       <Divider />

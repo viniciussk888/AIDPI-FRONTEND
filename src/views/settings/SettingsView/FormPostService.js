@@ -24,6 +24,7 @@ import Paper from '@material-ui/core/Paper';
 import Delete from '@material-ui/icons/Delete';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useSelector } from 'react-redux';
 import api from '../../../services/api'
 
 const useStyles = makeStyles(({
@@ -57,7 +58,7 @@ const FormPostService = ({ className, ...rest }) => {
   const [city, setCity] = useState('')
 
   const config = {
-    headers: { Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjMsImlhdCI6MTU5OTE4MTg0OX0.eOrfm0WKTJXpXDqmQIIYCpMEqGfHb1ZMngwK3i1ppZU` }
+    headers: { Authorization: `Bearer ${useSelector(state => state.token)}` }
   };
 
   useEffect(() => {
@@ -70,7 +71,7 @@ const FormPostService = ({ className, ...rest }) => {
       }
     }
     fetchServiceStation()
-  }, [control])
+  }, [control, config])
 
   async function handleCreatePostService(e) {
     e.preventDefault()
@@ -100,15 +101,6 @@ const FormPostService = ({ className, ...rest }) => {
         console.log(error)
         notifyError()
       }
-    }
-  }
-  async function updatePassword(id) {
-    try {
-      await api.put(`users/${id}`, config)
-      notifySucess()
-    } catch (error) {
-      console.log(error)
-      notifyError()
     }
   }
 

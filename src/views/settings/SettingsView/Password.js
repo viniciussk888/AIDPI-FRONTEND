@@ -12,16 +12,27 @@ import {
   makeStyles
 } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useSelector } from 'react-redux';
+import api from '../../../services/api'
 
 const useStyles = makeStyles(({
   root: {}
 }));
 
 const Password = ({ className, ...rest }) => {
+  const notifySucess = () => toast.success("Operação realizada com sucesso!");
+  const notifyError = () => toast.error("Ocorreu um erro ao realizar a operação!");
   const classes = useStyles();
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [alertErro, setAlertError] = useState(false)
+  const id = useSelector(state => state.id)
+
+  const config = {
+    headers: { Authorization: `Bearer ${useSelector(state => state.token)}` }
+  };
 
 
   async function handleUpdatePassword(e) {
@@ -29,10 +40,19 @@ const Password = ({ className, ...rest }) => {
     if (password !== confirmPassword) {
       return setAlertError(true)
     }
-    console.log(
-      password
-    )
-    setAlertError(false)
+
+    try {
+      await api.put(`users/${id}`, {
+        password
+      }, config)
+      setAlertError(false)
+      notifySucess()
+    } catch (error) {
+      console.log(error)
+      notifyError()
+      setAlertError(false)
+    }
+
   }
 
   return (
@@ -85,6 +105,17 @@ const Password = ({ className, ...rest }) => {
           </Button>
         </Box>
       </Card>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </form>
   );
 };
