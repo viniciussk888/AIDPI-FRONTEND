@@ -7,13 +7,21 @@ import 'src/mixins/chartjs';
 import theme from 'src/theme';
 import routes from 'src/routes';
 
+import { store, persistor } from './store/';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+
 const App = () => {
   const routing = useRoutes(routes);
 
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
-      {routing}
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          {routing}
+        </PersistGate>
+      </Provider>
     </ThemeProvider>
   );
 };

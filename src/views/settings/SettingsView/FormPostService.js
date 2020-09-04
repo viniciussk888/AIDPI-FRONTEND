@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {
@@ -24,6 +24,7 @@ import Paper from '@material-ui/core/Paper';
 import Delete from '@material-ui/icons/Delete';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import api from '../../../services/api'
 
 const useStyles = makeStyles(({
   root: {},
@@ -40,38 +41,73 @@ const useStyles = makeStyles(({
   }
 }));
 
-function createData(name) {
-  return { name };
-}
-
-const rows = [
-  createData('UPA'),
-  createData('POSTO SAO FRANCISCO'),
-  createData('POSTO CENTRO'),
-  createData('POSTO SAO BENTO'),
-  createData('UPA 2'),
-];
 
 const FormPostService = ({ className, ...rest }) => {
   const notifySucess = () => toast.success("Operação realizada com sucesso!");
   const notifyError = () => toast.error("Ocorreu um erro ao realizar na operação!");
   const classes = useStyles();
 
+  const [servicesStations, setServicesStations] = useState([])
+
+  const [control, setControl] = useState(false)
+
   const [name, setName] = useState('')
   const [district, setDistrict] = useState('')
   const [adress, setAdress] = useState('')
   const [city, setCity] = useState('')
 
+  const config = {
+    headers: { Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjMsImlhdCI6MTU5OTE4MTg0OX0.eOrfm0WKTJXpXDqmQIIYCpMEqGfHb1ZMngwK3i1ppZU` }
+  };
+
+  useEffect(() => {
+    async function fetchServiceStation() {
+      try {
+        const response = await api.get('servicesstations', config)
+        setServicesStations(response.data)
+      } catch (error) {
+        notifyError()
+      }
+    }
+    fetchServiceStation()
+  }, [control])
+
   async function handleCreatePostService(e) {
     e.preventDefault()
     try {
-      console.log(
-        name,
-        district,
-        adress,
-        city)
+      await api.post('servicesstations', {
+        name: name,
+        district: district,
+        adress: adress,
+        city: city
+      }, config)
+      notifySucess()
+      setControl(!control)
+    } catch (error) {
+      console.log(error)
+      notifyError()
+    }
+  }
+
+  async function deleteServiceStation(id) {
+    var r = window.confirm("Confirma DELETAR PERMANENTEMENTE o cadastro?");
+    if (r === true) {
+      try {
+        await api.delete(`servicesstations/${id}`, config)
+        notifySucess()
+        setControl(!control)
+      } catch (error) {
+        console.log(error)
+        notifyError()
+      }
+    }
+  }
+  async function updatePassword(id) {
+    try {
+      await api.put(`users/${id}`, config)
       notifySucess()
     } catch (error) {
+      console.log(error)
       notifyError()
     }
   }
@@ -112,17 +148,25 @@ const FormPostService = ({ className, ...rest }) => {
                   <TableHead>
                     <TableRow>
                       <TableCell>Nome</TableCell>
+                      <TableCell align="left">Bairro</TableCell>
+                      <TableCell align="left">Cidade</TableCell>
                       <TableCell align="right">Deletar</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {rows.map((row) => (
-                      <TableRow key={row.name}>
+                    {servicesStations.map((serviceStation) => (
+                      <TableRow key={serviceStation.id}>
                         <TableCell component="th" scope="row">
-                          {row.name}
+                          {serviceStation.name}
+                        </TableCell>
+                        <TableCell align="left">
+                          {serviceStation.district}
+                        </TableCell>
+                        <TableCell align="left">
+                          {serviceStation.city}
                         </TableCell>
                         <TableCell align="right">
-                          <IconButton>
+                          <IconButton onClick={() => (deleteServiceStation(serviceStation.id))}>
                             <Delete className={classes.deleteIcon} />
                           </IconButton>
                         </TableCell>

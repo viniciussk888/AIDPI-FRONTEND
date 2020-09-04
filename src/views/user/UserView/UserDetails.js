@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import Edit from '@material-ui/icons/Edit'
+import Delete from '@material-ui/icons/Delete'
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import data from './data';
 import {
   FormControlLabel,
   Checkbox,
@@ -17,6 +16,8 @@ import {
 } from '@material-ui/core';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+import api from '../../../services/api'
 
 const userType = [
   {
@@ -50,19 +51,27 @@ const serviceStationArray = [
 
 const useStyles = makeStyles(() => ({
   root: {},
+  buttons: {
+    display: "flex"
+  },
+  buttonDelete: {
+    color: 'red'
+  }
 }));
 
 const UserDetails = ({ className, ...rest }) => {
-  const notifySucess = () => toast.success("Usuário cadastrado com sucesso!");
-  const notifyError = () => toast.error("Ocorreu um erro ao realizar cadastro!");
+  const notifySucess = () => toast.success("Operação realizada com sucesso!");
+  const notifyError = () => toast.error("Ocorreu um erro ao realizar a operação!");
   const classes = useStyles();
 
-  const [customers] = useState(data);
-
   const [controlUpdate, setControlUpdate] = useState(false)
+  const [control, setControl] = useState(false)
 
+  const [users, setUsers] = useState([])
+
+  const [id, setId] = useState('')
   const [name, setName] = useState('')
-  const [login, setLogin] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
@@ -73,37 +82,107 @@ const UserDetails = ({ className, ...rest }) => {
   const [serviceStation, setServiceStation] = useState('UPA')
   const [aidpi, setAidpi] = useState(false)
   const [admin, setAdmin] = useState(false)
-  const [active, setActive] = useState(false)
+  const [active, setActive] = useState(true)
 
+  const config = {
+    headers: { Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjMsImlhdCI6MTU5OTE4MTg0OX0.eOrfm0WKTJXpXDqmQIIYCpMEqGfHb1ZMngwK3i1ppZU` }
+  };
 
+  useEffect(() => {
+    async function fetchUsers() {
+      try {
+        const response = await api.get('users', config)
+        setUsers(response.data)
+      } catch (error) {
+        notifyError()
+      }
+    }
+    fetchUsers()
+  }, [controlUpdate, control])
 
   async function handleSubmitUserForm(e) {
     e.preventDefault()
 
     try {
-      console.log(
-        name,
-        login,
-        password,
-        email,
-        phone,
-        city,
-        district,
-        adress,
-        office,
-        serviceStation,
-        aidpi,
-        admin,
-        active,
-      )
+      const response = await api.post(`users`, {
+        name: name,
+        username: username,
+        password: password,
+        email: email,
+        phone: phone,
+        city: city,
+        district: district,
+        adress: adress,
+        office: office,
+        serviceStation: serviceStation,
+        aidpi: aidpi,
+        admin: admin,
+        active: active
+      }, config)
       notifySucess()
+      setControl(!control)
     } catch (error) {
       notifyError()
     }
   }
 
-  function toTop() {
+  async function updateUser() {
+    if (password === "" || password === null) {
+      return alert("Defina uma senha!")
+    }
+    try {
+      const response = await api.put(`users/${id}`, {
+        name: name,
+        username: username,
+        password: password,
+        email: email,
+        phone: phone,
+        city: city,
+        district: district,
+        adress: adress,
+        office: office,
+        serviceStation: serviceStation,
+        aidpi: aidpi,
+        admin: admin,
+        active: active
+      }, config)
+      notifySucess()
+      window.location.reload()
+    } catch (error) {
+      console.log(error)
+      notifyError()
+    }
+  }
+  async function deleteUser(id) {
+    var r = window.confirm("Confirma DELETAR PERMANENTEMENTE o usuário?");
+    if (r == true) {
+      try {
+        await api.delete(`users/${id}`, config)
+        notifySucess()
+        setControl(!control)
+      } catch (error) {
+        console.log(error)
+        notifyError()
+      }
+    }
+  }
+
+  function toTop(user) {
     setControlUpdate(true)
+
+    setId(user.id)
+    setName(user.name)
+    setUsername(user.username)
+    setEmail(user.email)
+    setPhone(user.phone)
+    setCity(user.city)
+    setDistrict(user.district)
+    setAdress(user.adress)
+    setOffice(user.office)
+    setServiceStation(user.serviceStation)
+    setAidpi(user.aidpi)
+    setAdmin(user.admin)
+    setActive(user.active)
   }
 
   return (
@@ -149,10 +228,10 @@ const UserDetails = ({ className, ...rest }) => {
                 <TextField
                   fullWidth
                   label="Login"
-                  name="login"
-                  onChange={e => setLogin(e.target.value)}
+                  name="username"
+                  onChange={e => setUsername(e.target.value)}
                   required
-                  value={login}
+                  value={username}
                   variant="outlined"
                 />
               </Grid>
@@ -304,21 +383,21 @@ const UserDetails = ({ className, ...rest }) => {
               </Grid>
               <Grid item xs={12} sm={2}>
                 <FormControlLabel
-                  control={<Checkbox onChange={() => (setActive(!active))} color="secondary" name="active" value={active} />}
-                  label="Inativo"
+                  control={<Checkbox onChange={() => (setActive(!active))} checked={active} color="secondary" name="active" value={active} />}
+                  label="Ativo"
                 />
               </Grid>
 
               <Grid item xs={12} sm={2}>
                 <FormControlLabel
-                  control={<Checkbox onChange={() => (setAdmin(!admin))} color="secondary" name="admin" value={admin} />}
+                  control={<Checkbox onChange={() => (setAdmin(!admin))} checked={admin} color="secondary" name="admin" value={admin} />}
                   label="Admin"
                 />
               </Grid>
 
               <Grid item xs={12} sm={2}>
                 <FormControlLabel
-                  control={<Checkbox onChange={() => (setAidpi(!aidpi))} color="secondary" name="aidpi" value={aidpi} />}
+                  control={<Checkbox onChange={() => (setAidpi(!aidpi))} checked={aidpi} color="secondary" name="aidpi" value={aidpi} />}
                   label="AIDPI"
                 />
               </Grid>
@@ -336,6 +415,7 @@ const UserDetails = ({ className, ...rest }) => {
                 <Button
                   color="primary"
                   variant="contained"
+                  onClick={updateUser}
                 >
                   Atualizar
         </Button>
@@ -372,7 +452,7 @@ const UserDetails = ({ className, ...rest }) => {
                     NOME
                 </TableCell>
                   <TableCell>
-                    CPF
+                    E-MAIL
                 </TableCell>
                   <TableCell>
                     POSTO
@@ -392,15 +472,20 @@ const UserDetails = ({ className, ...rest }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {customers.map((customer) => (
+                {users.map((user) => (
                   <TableRow
                     hover
-                    key={customer.id}
+                    key={user.id}
                   >
                     <TableCell padding="checkbox">
-                      <IconButton href="#topo" onClick={toTop} color="primary">
-                        <Edit />
-                      </IconButton>
+                      <div className={classes.buttons}>
+                        <IconButton href="#topo" onClick={() => (toTop(user))} color="primary">
+                          <Edit />
+                        </IconButton>
+                        <IconButton className={classes.buttonDelete} onClick={() => (deleteUser(user.id))} color="secundary">
+                          <Delete />
+                        </IconButton>
+                      </div>
                     </TableCell>
                     <TableCell>
                       <Box
@@ -412,21 +497,27 @@ const UserDetails = ({ className, ...rest }) => {
                           color="textPrimary"
                           variant="body1"
                         >
-                          {customer.name}
+                          {user.name}
                         </Typography>
                       </Box>
                     </TableCell>
                     <TableCell>
-                      {customer.email}
+                      {user.email}
                     </TableCell>
                     <TableCell>
-                      {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
+                      {user.serviceStation}
                     </TableCell>
                     <TableCell>
-                      {customer.phone}
+                      {user.office}
                     </TableCell>
                     <TableCell>
-                      {moment(customer.createdAt).format('DD/MM/YYYY')}
+                      {user.admin ? "SIM" : "NÃO"}
+                    </TableCell>
+                    <TableCell>
+                      {user.aidpi ? "SIM" : "NÃO"}
+                    </TableCell>
+                    <TableCell>
+                      {user.active ? "SIM" : "NÃO"}
                     </TableCell>
                   </TableRow>
                 ))}

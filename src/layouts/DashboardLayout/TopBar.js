@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import {
@@ -15,6 +15,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';
 import Logo from 'src/components/Logo';
+import { useSelector, useDispatch } from 'react-redux';
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -31,6 +32,19 @@ const TopBar = ({
 }) => {
   const classes = useStyles();
   const [notifications] = useState([]);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const auth = useSelector(state => state.auth)
+
+  useEffect(() => {
+    if (auth === 0) {
+      navigate('/login')
+    }
+  }, [logout])
+
+  function logout() {
+    dispatch({ type: 'LOG_OUT' })
+  }
 
   return (
     <AppBar
@@ -53,7 +67,7 @@ const TopBar = ({
               <NotificationsIcon />
             </Badge>
           </IconButton>
-          <IconButton color="inherit">
+          <IconButton onClick={logout} color="inherit">
             <InputIcon />
           </IconButton>
         </Hidden>
