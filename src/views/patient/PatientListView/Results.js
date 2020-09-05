@@ -7,16 +7,24 @@ import { Box, Card, Table, TableBody, TableCell, TableHead, TableRow, Typography
 import getInitials from 'src/utils/getInitials';
 import calcAge from 'src/utils/calcAge';
 import Edit from '@material-ui/icons/Edit'
+import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
   root: {},
   avatar: {
     marginRight: theme.spacing(2)
+  },
+  results: {
+    margin: theme.spacing(2)
   }
 }));
 
 const Results = ({ className, patients, ...rest }) => {
   const classes = useStyles();
+
+  function editPatient(id) {
+    localStorage.setItem('patientEdit', id)
+  }
 
   return (
     <Card
@@ -52,15 +60,18 @@ const Results = ({ className, patients, ...rest }) => {
               </TableRow>
             </TableHead>
             <TableBody>
+              {patients.length === 0 && <Typography className={classes.results}>Nenhum resultado!</Typography>}
               {patients.map((patient) => (
                 <TableRow
                   hover
                   key={patient.id}
                 >
                   <TableCell padding="checkbox">
-                    <IconButton color="primary">
-                      <Edit />
-                    </IconButton>
+                    <Link to="/app/newpatient">
+                      <IconButton onClick={() => (editPatient(patient.id))} color="primary">
+                        <Edit />
+                      </IconButton>
+                    </Link>
                   </TableCell>
                   <TableCell>
                     <Box

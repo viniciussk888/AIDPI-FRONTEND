@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import {
@@ -135,6 +135,42 @@ const NewPatient = ({ className, pacient, ...rest }) => {
   const config = {
     headers: { Authorization: `Bearer ${useSelector(state => state.token)}` }
   };
+  async function fecthEditPatient(id) {
+    try {
+      const response = await api.get(`patients/${id}`, config)
+      console.log(response.data)
+      setName(response.data.name)
+      setColor(response.data.color)
+      setSex(response.data.sex)
+      setTypeBlood(response.data.typeBlood)
+      setWeight(response.data.weight)
+      setLength(response.data.length)
+      setTax(response.data.tax)
+      setSus(response.data.sus)
+      setCpf(response.data.cpf)
+      setRg(response.data.rg)
+      setBirthDate(response.data.birthDate)
+      setPhone(response.data.phone)
+      setAdress(response.data.adress)
+      setDistrict(response.data.district)
+      setCity(response.data.city)
+      setNumber(response.data.number)
+      setMotherName(response.data.motherName)
+      setFatherName(response.data.fatherName)
+      setNotes(response.data.notes)
+      setSpecialPatient(response.data.specialPatient)
+      setActive(response.data.active)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  useEffect(() => {
+    const id = localStorage.getItem('patientEdit')
+    localStorage.setItem('patientEdit', null)
+    if (id > 0) {
+      fecthEditPatient(id)
+    }
+  }, [])
 
 
   async function handleSubmitPatientForm(e) {

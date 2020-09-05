@@ -36,22 +36,23 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const CustomerListView = () => {
+const PatientListView = () => {
   const notifySucess = () => toast.success("Operação realizada com sucesso!");
   const notifyError = () => toast.error("Ocorreu um erro ao realizar a operação!");
   const classes = useStyles();
-  const [searchName, setSearchName] = useState('')
+  const [searchPatientName, setSearchPatientName] = useState('')
   const [patients, setPatients] = useState([])
 
   const config = {
     headers: { Authorization: `Bearer ${useSelector(state => state.token)}` }
   };
 
-
   const handleSearchPatient = useCallback(async () => {
     try {
-      const response = await api.get(`patients/${searchName}`, config)
-      setPatients([response.data])
+      const response = await api.post(`searchpatients`, {
+        searchPatientName
+      }, config)
+      setPatients(response.data)
       notifySucess()
     } catch (error) {
       notifyError()
@@ -86,7 +87,7 @@ const CustomerListView = () => {
                 <Box maxWidth={600} className={classes.boxSearch}>
                   <TextField
                     fullWidth
-                    onChange={e => setSearchName(e.target.value)}
+                    onChange={e => setSearchPatientName(e.target.value)}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -137,4 +138,4 @@ const CustomerListView = () => {
   );
 };
 
-export default CustomerListView;
+export default PatientListView;
