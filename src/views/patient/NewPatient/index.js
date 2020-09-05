@@ -18,6 +18,8 @@ import {
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import api from '../../../services/api'
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -103,7 +105,7 @@ const colors = [
 ];
 
 
-const NewPatient = ({ className, ...rest }) => {
+const NewPatient = ({ className, pacient, ...rest }) => {
   const notifySucess = () => toast.success("Paciente cadastrado com sucesso!");
   const notifyError = () => toast.error("Ocorreu um erro ao realizar cadastro!");
   const classes = useStyles();
@@ -128,12 +130,17 @@ const NewPatient = ({ className, ...rest }) => {
   const [fatherName, setFatherName] = useState('')
   const [notes, setNotes] = useState('')
   const [specialPatient, setSpecialPatient] = useState(false)
-  const [active, setActive] = useState(false)
+  const [active, setActive] = useState(true)
+
+  const config = {
+    headers: { Authorization: `Bearer ${useSelector(state => state.token)}` }
+  };
+
 
   async function handleSubmitPatientForm(e) {
     e.preventDefault()
     try {
-      console.log(
+      await api.post('patients', {
         name,
         color,
         sex,
@@ -154,8 +161,8 @@ const NewPatient = ({ className, ...rest }) => {
         fatherName,
         notes,
         specialPatient,
-        active,
-      )
+        active
+      }, config)
       notifySucess()
     } catch (error) {
       notifyError()
@@ -508,7 +515,7 @@ const NewPatient = ({ className, ...rest }) => {
 
               <Grid item xs={12} sm={2}>
                 <FormControlLabel
-                  control={<Checkbox onChange={() => (setSpecialPatient(!specialPatient))} color="secondary" name="saveAddress" checke={specialPatient} value={specialPatient} />}
+                  control={<Checkbox onChange={() => (setSpecialPatient(!specialPatient))} color="secondary" name="saveAddress" checked={specialPatient} value={specialPatient} />}
                   label="Paciente especial"
                 />
               </Grid>
@@ -516,7 +523,7 @@ const NewPatient = ({ className, ...rest }) => {
               <Grid item xs={12} sm={2}>
                 <FormControlLabel
                   control={<Checkbox onChange={() => (setActive(!active))} color="secondary" name="saveAddress" checked={active} value={active} />}
-                  label="Inativo"
+                  label="Ativo"
                 />
               </Grid>
 

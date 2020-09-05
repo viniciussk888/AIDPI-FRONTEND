@@ -49,6 +49,7 @@
     "react-router-dom": "^6.0.0-beta.0",
     "react-scripts": "^3.4.1",
     "react-toastify": "^6.0.8",
+    "react-redux": "*",
     "redux": "^4.0.5",
     "redux-persist": "^6.0.0",
     "uuid": "^8.3.0",

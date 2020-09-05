@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+//import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { Box, Card, Table, TableBody, TableCell, TableHead, TablePagination, TableRow, Typography, makeStyles, IconButton } from '@material-ui/core';
-//import getInitials from 'src/utils/getInitials';
+import { Box, Card, Table, TableBody, TableCell, TableHead, TableRow, Typography, makeStyles, IconButton } from '@material-ui/core';
+import getInitials from 'src/utils/getInitials';
+import calcAge from 'src/utils/calcAge';
 import Edit from '@material-ui/icons/Edit'
 
 const useStyles = makeStyles((theme) => ({
@@ -14,20 +15,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Results = ({ className, customers, ...rest }) => {
+const Results = ({ className, patients, ...rest }) => {
   const classes = useStyles();
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(0);
-
-
-
-  const handleLimitChange = (event) => {
-    setLimit(event.target.value);
-  };
-
-  const handlePageChange = (event, newPage) => {
-    setPage(newPage);
-  };
 
   return (
     <Card
@@ -60,16 +49,13 @@ const Results = ({ className, customers, ...rest }) => {
                 <TableCell>
                   BAIRRO
                 </TableCell>
-                <TableCell>
-                  RUA
-                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {customers.slice(0, limit).map((customer) => (
+              {patients.map((patient) => (
                 <TableRow
                   hover
-                  key={customer.id}
+                  key={patient.id}
                 >
                   <TableCell padding="checkbox">
                     <IconButton color="primary">
@@ -81,26 +67,31 @@ const Results = ({ className, customers, ...rest }) => {
                       alignItems="center"
                       display="flex"
                     >
-                      { /*getInitials(customer.name)*/}
+                      { /*getInitials(patient.name)*/}
                       <Typography
                         color="textPrimary"
                         variant="body1"
                       >
-                        {customer.name}
+                        {patient.name}
                       </Typography>
                     </Box>
                   </TableCell>
                   <TableCell>
-                    {customer.email}
+                    <TableCell>
+                      {calcAge(patient.birthDate)}
+                    </TableCell>
                   </TableCell>
                   <TableCell>
-                    {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
+                    {getInitials(patient.sex)}
                   </TableCell>
                   <TableCell>
-                    {customer.phone}
+                    {patient.cpf}
                   </TableCell>
                   <TableCell>
-                    {moment(customer.createdAt).format('DD/MM/YYYY')}
+                    {patient.sus}
+                  </TableCell>
+                  <TableCell>
+                    {patient.district}
                   </TableCell>
                 </TableRow>
               ))}
@@ -108,22 +99,13 @@ const Results = ({ className, customers, ...rest }) => {
           </Table>
         </Box>
       </PerfectScrollbar>
-      <TablePagination
-        component="div"
-        count={customers.length}
-        onChangePage={handlePageChange}
-        onChangeRowsPerPage={handleLimitChange}
-        page={page}
-        rowsPerPage={limit}
-        rowsPerPageOptions={[5, 10, 25]}
-      />
-    </Card>
+    </Card >
   );
 };
 
 Results.propTypes = {
   className: PropTypes.string,
-  customers: PropTypes.array.isRequired
+  patients: PropTypes.array.isRequired
 };
 
 export default Results;
