@@ -106,10 +106,13 @@ const colors = [
 
 
 const NewPatient = ({ className, pacient, ...rest }) => {
-  const notifySucess = () => toast.success("Paciente cadastrado com sucesso!");
-  const notifyError = () => toast.error("Ocorreu um erro ao realizar cadastro!");
+  const notifySucess = () => toast.success("Operação realizada com sucesso!");
+  const notifyError = () => toast.error("Ocorreu um erro ao realizar a operação!");
   const classes = useStyles();
 
+  const [enableEditButton, setEnableEditButton] = useState(false)
+
+  const [id, setId] = useState('')
   const [name, setName] = useState('')
   const [color, setColor] = useState('Branco(a)')
   const [sex, setSex] = useState('Masculino')
@@ -138,7 +141,7 @@ const NewPatient = ({ className, pacient, ...rest }) => {
   async function fecthEditPatient(id) {
     try {
       const response = await api.get(`patients/${id}`, config)
-      console.log(response.data)
+      setId(response.data.id)
       setName(response.data.name)
       setColor(response.data.color)
       setSex(response.data.sex)
@@ -169,6 +172,7 @@ const NewPatient = ({ className, pacient, ...rest }) => {
     localStorage.setItem('patientEdit', null)
     if (id > 0) {
       fecthEditPatient(id)
+      setEnableEditButton(true)
     }
   }, [])
 
@@ -204,6 +208,37 @@ const NewPatient = ({ className, pacient, ...rest }) => {
       notifyError()
     }
 
+  }
+
+  async function updatePatient() {
+    try {
+      await api.put(`patients/${id}`, {
+        name,
+        color,
+        sex,
+        typeBlood,
+        weight,
+        length,
+        tax,
+        sus,
+        cpf,
+        rg,
+        birthDate,
+        phone,
+        adress,
+        district,
+        city,
+        number,
+        motherName,
+        fatherName,
+        notes,
+        specialPatient,
+        active
+      }, config)
+      notifySucess()
+    } catch (error) {
+      notifyError()
+    }
   }
 
   return (
@@ -571,13 +606,24 @@ const NewPatient = ({ className, pacient, ...rest }) => {
             justifyContent="flex-end"
             p={2}
           >
-            <Button
-              color="primary"
-              variant="contained"
-              type="submit"
-            >
-              Gravar
+            {enableEditButton ?
+              <Button
+                color="primary"
+                variant="contained"
+                type='button'
+                onClick={updatePatient}
+              >
+                Atualizar
+        </Button>
+              :
+              <Button
+                color="primary"
+                variant="contained"
+                type="submit"
+              >
+                Gravar
           </Button>
+            }
           </Box>
         </Card>
 
