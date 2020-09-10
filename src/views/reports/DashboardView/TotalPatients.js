@@ -22,33 +22,33 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const TotalPatients = ({className, ...rest}) => {
+const TotalPatients = ({ className, totalPatients, ...rest }) => {
   const classes = useStyles();
 
   return (
     <Card
-    className={clsx(classes.root, className)}
-    {...rest}
+      className={clsx(classes.root, className)}
+      {...rest}
     >
       <CardContent>
         <Grid
-    container
-    justify="space-between"
-    spacing={3}
-    >
+          container
+          justify="space-between"
+          spacing={3}
+        >
           <Grid item>
             <Typography
-    color="textSecondary"
-    gutterBottom
-    variant="h6"
-    >
+              color="textSecondary"
+              gutterBottom
+              variant="h6"
+            >
               TOTAL DE PACIENTES
             </Typography>
             <Typography
-    color="textPrimary"
-    variant="h3"
-    >
-              1600
+              color="textPrimary"
+              variant="h3"
+            >
+              {totalPatients}
             </Typography>
           </Grid>
           <Grid item>
@@ -57,10 +57,10 @@ const TotalPatients = ({className, ...rest}) => {
             </Avatar>
           </Grid>
         </Grid>
-        
+
       </CardContent>
     </Card>
-    );
+  );
 };
 
 TotalPatients.propTypes = {

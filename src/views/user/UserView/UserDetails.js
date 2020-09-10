@@ -360,7 +360,7 @@ const UserDetails = ({ className, ...rest }) => {
               >
                 <TextField
                   fullWidth
-                  label="Posto de atendimento"
+                  helperText="Posto de atendimento"
                   name="serviceStation"
                   onChange={e => setServiceStation(e.target.value)}
                   required

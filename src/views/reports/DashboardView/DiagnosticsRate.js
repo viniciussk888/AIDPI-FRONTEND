@@ -15,33 +15,37 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const DiagnosticsRate = ({className, ...rest}) => {
+const DiagnosticsRate = ({ className, diagnosticsRate, ...rest }) => {
   const classes = useStyles();
 
   return (
     <Card
-    className={clsx(classes.root, className)}
-    {...rest}
+      className={clsx(classes.root, className)}
+      {...rest}
     >
       <CardContent>
         <Grid
-    container
-    justify="space-between"
-    spacing={3}
-    >
+          container
+          justify="space-between"
+          spacing={3}
+        >
           <Grid item>
             <Typography
-    color="textSecondary"
-    gutterBottom
-    variant="h6"
-    >
+              color="textSecondary"
+              gutterBottom
+              variant="h6"
+            >
               TAXA DE DIAGNÓSTICOS
             </Typography>
             <Typography
-    color="textPrimary"
-    variant="h3"
-    >
-              12.5%
+              color="textPrimary"
+              variant="h3"
+            >
+              {diagnosticsRate}
+              <Typography
+                color="textPrimary"
+                variant="h6"
+              >Por paciente</Typography>
             </Typography>
           </Grid>
           <Grid item>
@@ -52,13 +56,13 @@ const DiagnosticsRate = ({className, ...rest}) => {
         </Grid>
         <Box mt={3}>
           <LinearProgress
-    value={12.5}
-    variant="determinate"
-    />
+            value={diagnosticsRate}
+            variant="determinate"
+          />
         </Box>
       </CardContent>
     </Card>
-    );
+  );
 };
 
 DiagnosticsRate.propTypes = {

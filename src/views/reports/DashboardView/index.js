@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Grid, makeStyles } from '@material-ui/core';
 import Page from 'src/components/Page';
 import TotalDiagnostics from './TotalDiagnostics';
 import Graphic from './Graphic';
 import DiagnosticsRate from './DiagnosticsRate';
 import TotalPatients from './TotalPatients';
+import { useSelector } from 'react-redux';
+import api from '../../../services/api'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,6 +19,27 @@ const useStyles = makeStyles((theme) => ({
 
 const Dashboard = () => {
   const classes = useStyles();
+  const [totalPatients, setTotalPatients] = useState(0)
+  const [totalDiagnostics, setTotalDiagnostics] = useState(10)
+  const [diagnosticsRate, setDiagnosticsRate] = useState(0)
+
+  const config = {
+    headers: { Authorization: `Bearer ${useSelector(state => state.token)}` }
+  };
+
+  useEffect(() => {
+    async function fetchDashboard() {
+      try {
+        const response = await api.get('dashboard', config)
+        console.log()
+        setTotalPatients(response.data[0].totalPatients)
+        setDiagnosticsRate(totalDiagnostics / totalPatients)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetchDashboard()
+  }, [config])
 
   return (
     <Page
@@ -35,7 +58,7 @@ const Dashboard = () => {
             xl={4}
             xs={12}
           >
-            <TotalDiagnostics />
+            <TotalDiagnostics totalDiagnostics={totalDiagnostics} />
           </Grid>
           <Grid
             item
@@ -44,7 +67,7 @@ const Dashboard = () => {
             xl={4}
             xs={12}
           >
-            <TotalPatients />
+            <TotalPatients totalPatients={totalPatients} />
           </Grid>
           <Grid
             item
@@ -53,7 +76,7 @@ const Dashboard = () => {
             xl={4}
             xs={12}
           >
-            <DiagnosticsRate />
+            <DiagnosticsRate diagnosticsRate={diagnosticsRate} />
           </Grid>
           <Grid
             item
