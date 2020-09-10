@@ -46,6 +46,8 @@ const VaccinationList = () => {
   const notifyError = () => toast.error("Ocorreu um erro ao realizar na operação!");
   const classes = useStyles();
   const [patientSus, setPatientSus] = useState('');
+  const [PatientName, setPatientName] = useState('');
+  const [id, setId] = useState('');
   const [vaccines, setVaccines] = useState([]);
 
   const config = {
@@ -56,6 +58,8 @@ const VaccinationList = () => {
     try {
       const response = await api.get(`vaccines/${patientSus}`, config)
       setVaccines(JSON.parse(response.data[0].vaccine_list))
+      setPatientName(response.data[0].name)
+      setId(response.data[0].id)
       notifySucess()
     } catch (error) {
       notifyError()
@@ -120,7 +124,10 @@ const VaccinationList = () => {
             >
               <VaccinationCard
                 className={classes.productCard}
+                searchVaccines={searchVaccines}
                 vaccines={vaccines}
+                PatientName={PatientName}
+                id={id}
               />
             </Grid>
           </Grid>
