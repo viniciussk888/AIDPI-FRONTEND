@@ -3,13 +3,22 @@ import {
   Box,
   Container,
   Grid,
-  makeStyles
+  TextField,
+  InputAdornment,
+  SvgIcon,
+  makeStyles,
+  Button,
+  Card,
+  CardContent
 } from '@material-ui/core';
 //import { Pagination } from '@material-ui/lab';
 import Page from 'src/components/Page';
-import Toolbar from './Toolbar';
+import { Search as SearchIcon } from 'react-feather';
 import VaccinationCard from './VaccinationCard';
-import data from './data';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import api from '../../../services/api'
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,12 +29,39 @@ const useStyles = makeStyles((theme) => ({
   },
   productCard: {
     height: '100%'
+  },
+  font: {
+    fontFamily: 'Roboto'
+  },
+  boxSearch: {
+    display: 'flex'
+  },
+  buttonSearch: {
+    marginLeft: theme.spacing(2)
   }
 }));
 
 const VaccinationList = () => {
+  const notifySucess = () => toast.success("Operação realizada com sucesso!");
+  const notifyError = () => toast.error("Ocorreu um erro ao realizar na operação!");
   const classes = useStyles();
-  const [products] = useState(data);
+  const [patientSus, setPatientSus] = useState('');
+  const [vaccines, setVaccines] = useState([]);
+
+  const config = {
+    headers: { Authorization: `Bearer ${useSelector(state => state.token)}` }
+  };
+
+  async function searchVaccines() {
+    try {
+      const response = await api.get(`vaccines/${patientSus}`, config)
+      setVaccines(JSON.parse(response.data[0].vaccine_list))
+      notifySucess()
+    } catch (error) {
+      notifyError()
+      console.log(error)
+    }
+  }
 
   return (
     <Page
@@ -33,7 +69,44 @@ const VaccinationList = () => {
       title="Vacinação"
     >
       <Container maxWidth={false}>
-        <Toolbar />
+
+        <Box mt={3}>
+          <Card>
+            <CardContent>
+              <h5 className={classes.font}>Buscar pelo Nº do SUS</h5>
+              <Box maxWidth={500} className={classes.boxSearch}>
+                <TextField
+                  type="number"
+                  fullWidth
+                  onChange={e => setPatientSus(e.target.value)}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <SvgIcon
+                          fontSize="small"
+                          color="action"
+                        >
+                          <SearchIcon />
+                        </SvgIcon>
+                      </InputAdornment>
+                    )
+                  }}
+                  placeholder="Buscar ficha de vacinação do paciente"
+                  variant="outlined"
+                />
+                <Button
+                  color="primary"
+                  variant="contained"
+                  className={classes.buttonSearch}
+                  onClick={searchVaccines}
+                >
+                  BUSCAR
+        </Button>
+              </Box>
+            </CardContent>
+          </Card>
+        </Box>
+
         <Box mt={3}>
           <Grid
             container
@@ -47,11 +120,22 @@ const VaccinationList = () => {
             >
               <VaccinationCard
                 className={classes.productCard}
-                product={products}
+                vaccines={vaccines}
               />
             </Grid>
           </Grid>
         </Box>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         {/*<Box
           mt={3}
           display="flex"

@@ -37,40 +37,7 @@ const useStyles = makeStyles({
   }
 });
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('BCG', 'OK', '20/05/2020', 'ENF. JOAO CARLOS'),
-  createData('Hep B', '', '', ''),
-  createData('Penta¹', '', '', ''),
-  createData('VIP¹', '', '', ''),
-  createData('VORH¹', '', '', ''),
-  createData('PNM10¹', '', '', ''),
-  createData('MNG C¹', '', '', ''),
-  createData('Penta²', '', '', ''),
-  createData('VIP²', '', '', ''),
-  createData('VORH ²', '', '', ''),
-  createData('PNM10²', '', '', ''),
-  createData('MNG C²', '', '', ''),
-  createData('Penta³', '', '', ''),
-  createData('VIP³', '', '', ''),
-  createData('Gripe', '', '', ''),
-  createData('FA', '', '', ''),
-  createData('Hep A', '', '', ''),
-  createData('Tríplice V', '', '', ''),
-  createData('Tetra V', '', '', ''),
-  createData('MNG C(R)', '', '', ''),
-  createData('PNM10(R)', '', '', ''),
-  createData('VOP(1º R)', '', '', ''),
-  createData('DTP(1º R)', '', '', ''),
-  createData('VOP(2º R)', '', '', ''),
-  createData('DTP(2º R)', '', '', ''),
-];
-
-
-const VaccinationCard = ({ className, product, ...rest }) => {
+const VaccinationCard = ({ className, vaccines, ...rest }) => {
   const notifySucess = () => toast.success("Operação realizada com sucesso!");
   const notifyError = () => toast.error("Ocorreu um erro ao realizar na operação!");
   const classes = useStyles();
@@ -158,16 +125,16 @@ const VaccinationCard = ({ className, product, ...rest }) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map((row) => (
+                  {vaccines.map((row) => (
                     <TableRow key={row.name}>
                       <TableCell component="th" scope="row">
                         <strong>{row.name}</strong>
                       </TableCell>
-                      <TableCell align="">{row.calories}</TableCell>
-                      <TableCell align="">{row.fat}</TableCell>
-                      <TableCell align="">{row.carbs}</TableCell>
+                      <TableCell align="">{row.situation}</TableCell>
+                      <TableCell align="">{row.date}</TableCell>
+                      <TableCell align="">{row.responsible}</TableCell>
                       <TableCell align="right">
-                        {!row.calories && <IconButton onClick={() => { showModal(row.name) }}>
+                        {row.situation === "NÃO" && <IconButton onClick={() => { showModal(row.name) }}>
                           <Edit className={classes.editButton} color="primary" />
                         </IconButton>}
 
