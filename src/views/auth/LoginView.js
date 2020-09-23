@@ -12,6 +12,7 @@ import {
 import Page from 'src/components/Page';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import api from '../../services/api'
+import Logo from 'src/components/Logo';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -78,16 +79,12 @@ const LoginView = () => {
           <form onSubmit={handleLogin}>
             <Box mb={3}>
               <Typography
-                color="textPrimary"
-                variant="h2"
-              >
-                AIDPI
-                  </Typography>
-              <Typography
+                align="center"
                 color="textSecondary"
-                gutterBottom
-                variant="body2"
+                variant="body1"
               >
+                <Logo width='250px' />
+                <br />
                 Faça login na plataforma interna
                   </Typography>
             </Box>

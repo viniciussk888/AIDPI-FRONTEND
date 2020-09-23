@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 const Dashboard = () => {
   const classes = useStyles();
   const [totalPatients, setTotalPatients] = useState(0)
-  const [totalDiagnostics, setTotalDiagnostics] = useState(10)
+  const [totalDiagnostics] = useState(10)
   const [diagnosticsRate, setDiagnosticsRate] = useState(0)
 
   const config = {

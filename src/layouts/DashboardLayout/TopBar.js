@@ -13,8 +13,8 @@ import {
 import MenuIcon from '@material-ui/icons/Menu';
 //import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';
-import Logo from 'src/components/Logo';
 import { useSelector, useDispatch } from 'react-redux';
+import Logo from 'src/components/Logo';
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -53,7 +53,7 @@ const TopBar = ({
     >
       <Toolbar>
         <RouterLink to="/">
-          <Logo />
+          <Logo width='150px' />
         </RouterLink>
         <Box flexGrow={1} />
         <Hidden mdDown>

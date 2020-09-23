@@ -9,7 +9,6 @@ import DashboardView from 'src/views/reports/DashboardView';
 import LoginView from 'src/views/auth/LoginView';
 import NotFoundView from 'src/views/errors/NotFoundView';
 import VaccinationView from 'src/views/vaccination/VaccinationView';
-import RegisterView from 'src/views/auth/RegisterView';
 import SettingsView from 'src/views/settings/SettingsView';
 import AidpiListView from 'src/views/aidpi/AidpiListView';
 import NewAidpi from 'src/views/aidpi/NewAidpi';
@@ -35,7 +34,6 @@ const routes = [
     element: <MainLayout />,
     children: [
       { path: 'login', element: <LoginView /> },
-      { path: 'register', element: <RegisterView /> },
       { path: '404', element: <NotFoundView /> },
       { path: '/', element: <Navigate to="/app/dashboard" /> },
       { path: '*', element: <Navigate to="/404" /> }
