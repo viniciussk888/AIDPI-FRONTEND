@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 
 const VaccinationList = () => {
   const notifySucess = () => toast.success("Operação realizada com sucesso!");
-  const notifyError = () => toast.error("Ocorreu um erro ao realizar na operação!");
+  const notifyError = () => toast.error("Não encontrado!");
   const classes = useStyles();
   const [patientSus, setPatientSus] = useState('');
   const [PatientName, setPatientName] = useState('');
