@@ -28,9 +28,17 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from 'react-redux';
 //STEPS
 import RiskSigns from './RiskSigns';
-import PaymentForm from './PaymentForm';
-import Review from './Review';
+import CoughingAndBreathing from './CoughingAndBreathing';
+import Diarrhea from './Diarrhea';
+
 import api from 'src/services/api';
+import calcAge from 'src/utils/calcAge';
+import getInitials from 'src/utils/getInitials';
+import Fever from './Fever';
+import EarProblem from './EarProblem';
+import SoreThroat from './SoreThroat';
+import Malnutrition from './Malnutrition';
+import Vaccines from './Vaccines';
 
 const steps = [
   'SINAIS GERAIS DE PERIGO',
@@ -48,9 +56,19 @@ function getStepContent(step) {
     case 0:
       return <RiskSigns />;
     case 1:
-      return <PaymentForm />;
+      return <CoughingAndBreathing />;
     case 2:
-      return <Review />;
+      return <Diarrhea />;
+    case 3:
+      return <Fever />;
+    case 4:
+      return <EarProblem />;
+    case 5:
+      return <SoreThroat />;
+    case 6:
+      return <Malnutrition />;
+    case 7:
+      return <Vaccines />;
     default:
       throw new Error('Unknown step');
   }
@@ -168,8 +186,8 @@ const NewAidpi = ({ className, ...rest }) => {
         <React.Fragment>
           <CssBaseline />
           <AppBar color="default" className={classes.appBar}>
-            <p>Nome: <strong>{patient.name}</strong> Sexo: <strong>{patient.sex}</strong> SUS: <strong>{patient.sus}</strong></p>
-            <p>Bairro: <strong>{patient.district}</strong> Rua: <strong>{patient.adress}</strong> Numero: <strong>{patient.number}</strong></p>
+            <p>Nome: <strong>{patient.name}</strong> Sexo: <strong>{getInitials(patient.sex)}</strong> SUS: <strong>{patient.sus}</strong> Idade:<strong> {calcAge(patient.birthDate)} anos</strong></p>
+            <p>Bairro: <strong>{patient.district}</strong> Rua: <strong>{patient.adress}</strong> Numero: <strong>{patient.number}</strong> Cidade: <strong>{patient.city}</strong></p>
           </AppBar>
           <main className={classes.layout}>
             <Paper className={classes.paper}>
