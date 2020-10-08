@@ -16,29 +16,32 @@ import {
 import { Search as SearchIcon } from 'react-feather';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import Paper from '@material-ui/core/Paper';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
-import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
-import RiskSigns from './RiskSigns';
-import PaymentForm from './PaymentForm';
-import Review from './Review';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useSelector } from 'react-redux';
+//STEPS
+import RiskSigns from './RiskSigns';
+import PaymentForm from './PaymentForm';
+import Review from './Review';
+import api from 'src/services/api';
 
-const steps = ['SINAIS GERAIS DE PERIGO',
+const steps = [
+  'SINAIS GERAIS DE PERIGO',
   'TOSSE OU DIFICULDADE PARA RESPIRAR',
   'SINAIS DE DIARREIA',
   'SINAIS DE FEBRE',
   'PROBLEMA DE OUVIDO',
   'DOR DE GARGANTA',
   'DESNUTRIÇÃO OU ANEMIA',
-  'SITUAÇÃO DAS VACINAS'];
+  'SITUAÇÃO DAS VACINAS'
+];
 
 function getStepContent(step) {
   switch (step) {
@@ -66,6 +69,9 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     position: 'relative',
+    display: 'flex',
+    padding: 2,
+    justifyContent: 'center'
   },
   layout: {
     width: 'auto',
@@ -112,18 +118,16 @@ const NewAidpi = ({ className, ...rest }) => {
   const notifyError = () => toast.error("Ocorreu um erro ao realizar na operação!");
   const classes = useStyles();
 
-  const test = useState('test')
-  /*const [name, setName] = useState('')
-  const [weight, setWeight] = useState('')
-  const [length, setLength] = useState('')
-  const [tax, setTax] = useState('')
-  const [sus, setSus] = useState('')
-  const [birthDate, setBirthDate] = useState('')*/
+  const config = {
+    headers: { Authorization: `Bearer ${useSelector(state => state.token)}` }
+  };
+
+  const [searchPatientSus, setSearchPatientSus] = useState('')
+  const [patient, setPatient] = useState([])
 
   async function handleSubmitPatientForm(e) {
     e.preventDefault()
     try {
-      console.log(test)
       notifySucess()
     } catch (error) {
       notifyError()
@@ -132,14 +136,92 @@ const NewAidpi = ({ className, ...rest }) => {
   }
 
   const [activeStep, setActiveStep] = React.useState(0);
-
   const handleNext = () => {
     setActiveStep(activeStep + 1);
   };
-
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
+
+  async function searchPatientWithSus() {
+    if (!searchPatientSus) {
+      return alert("Informe o Nº do SUS!")
+    }
+    try {
+      const response = await api.post(`searchwithsus`, {
+        searchPatientSus
+      }, config)
+      setPatient(response.data[0])
+      notifySucess()
+    } catch (error) {
+      console.log(error)
+      notifyError()
+    }
+  }
+
+  function patientInfo() {
+    if (!patient || patient.length === 0) {
+      return <h4>Nenhum paciente!</h4>
+    }
+    return (
+      <>
+        <React.Fragment>
+          <CssBaseline />
+          <AppBar color="default" className={classes.appBar}>
+            <p>Nome: <strong>{patient.name}</strong> Sexo: <strong>{patient.sex}</strong> SUS: <strong>{patient.sus}</strong></p>
+            <p>Bairro: <strong>{patient.district}</strong> Rua: <strong>{patient.adress}</strong> Numero: <strong>{patient.number}</strong></p>
+          </AppBar>
+          <main className={classes.layout}>
+            <Paper className={classes.paper}>
+              <Card container>
+                <PerfectScrollbar>
+                  <Stepper activeStep={activeStep} className={classes.stepper}>
+                    {steps.map((label) => (
+                      <Step key={label}>
+                        <StepLabel>{label}</StepLabel>
+                      </Step>
+                    ))}
+                  </Stepper>
+                </PerfectScrollbar>
+              </Card>
+              <React.Fragment>
+                {activeStep === steps.length ? (
+                  <React.Fragment>
+                    <Typography variant="h5" gutterBottom>
+                      Thank you for your order.
+                </Typography>
+                    <Typography variant="subtitle1">
+                      Your order number is #2001539. We have emailed your order confirmation, and will
+                      send you an update when your order has shipped.
+                </Typography>
+                  </React.Fragment>
+                ) : (
+                    <React.Fragment>
+                      {getStepContent(activeStep)}
+                      <div className={classes.buttons}>
+                        {activeStep !== 0 && (
+                          <Button variant="outlined" onClick={handleBack} className={classes.button}>
+                            Retornar
+                          </Button>
+                        )}
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={handleNext}
+                          className={classes.button}
+                        >
+                          {activeStep === steps.length - 1 ? 'Gravar' : 'Avançar'}
+                        </Button>
+                      </div>
+                    </React.Fragment>
+                  )}
+              </React.Fragment>
+            </Paper>
+          </main>
+        </React.Fragment>
+      </>
+    )
+  }
 
   return (
     <>
@@ -162,6 +244,8 @@ const NewAidpi = ({ className, ...rest }) => {
                 <TextField
                   type="number"
                   fullWidth
+                  value={searchPatientSus}
+                  onChange={e => setSearchPatientSus(e.target.value)}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -183,6 +267,7 @@ const NewAidpi = ({ className, ...rest }) => {
                 color="primary"
                 variant="contained"
                 className={classes.buttonSearch}
+                onClick={searchPatientWithSus}
               >
                 BUSCAR PACIENTE
         </Button>
@@ -191,65 +276,7 @@ const NewAidpi = ({ className, ...rest }) => {
           <Divider />
           <CardContent>
 
-
-            <React.Fragment>
-              <CssBaseline />
-              <AppBar position="absolute" color="default" className={classes.appBar}>
-                <Toolbar>
-                  <Typography variant="h6" color="inherit" noWrap>
-                    Dados paciente
-          </Typography>
-                </Toolbar>
-              </AppBar>
-              <main className={classes.layout}>
-                <Paper className={classes.paper}>
-                  <Card container>
-                    <PerfectScrollbar>
-                      <Stepper activeStep={activeStep} className={classes.stepper}>
-                        {steps.map((label) => (
-                          <Step key={label}>
-                            <StepLabel>{label}</StepLabel>
-                          </Step>
-                        ))}
-                      </Stepper>
-                    </PerfectScrollbar>
-                  </Card>
-                  <React.Fragment>
-                    {activeStep === steps.length ? (
-                      <React.Fragment>
-                        <Typography variant="h5" gutterBottom>
-                          Thank you for your order.
-                </Typography>
-                        <Typography variant="subtitle1">
-                          Your order number is #2001539. We have emailed your order confirmation, and will
-                          send you an update when your order has shipped.
-                </Typography>
-                      </React.Fragment>
-                    ) : (
-                        <React.Fragment>
-                          {getStepContent(activeStep)}
-                          <div className={classes.buttons}>
-                            {activeStep !== 0 && (
-                              <Button variant="outlined" onClick={handleBack} className={classes.button}>
-                                Retornar
-                              </Button>
-                            )}
-                            <Button
-                              variant="contained"
-                              color="primary"
-                              onClick={handleNext}
-                              className={classes.button}
-                            >
-                              {activeStep === steps.length - 1 ? 'Gravar' : 'Avançar'}
-                            </Button>
-                          </div>
-                        </React.Fragment>
-                      )}
-                  </React.Fragment>
-                </Paper>
-              </main>
-            </React.Fragment>
-
+            {patientInfo()}
 
           </CardContent>
           <Divider />
@@ -258,7 +285,7 @@ const NewAidpi = ({ className, ...rest }) => {
       </form>
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={2000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

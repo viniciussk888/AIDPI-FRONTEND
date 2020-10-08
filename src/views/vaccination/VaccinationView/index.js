@@ -55,6 +55,9 @@ const VaccinationList = () => {
   };
 
   async function searchVaccines() {
+    if (!patientSus) {
+      return alert("Informe o Nº do SUS!")
+    }
     try {
       const response = await api.get(`vaccines/${patientSus}`, config)
       setVaccines(JSON.parse(response.data[0].vaccine_list))

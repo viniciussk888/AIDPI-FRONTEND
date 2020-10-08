@@ -175,8 +175,6 @@ const NewPatient = ({ className, pacient, ...rest }) => {
       setEnableEditButton(true)
     }
   }, [])
-
-
   async function handleSubmitPatientForm(e) {
     e.preventDefault()
     try {
@@ -209,7 +207,6 @@ const NewPatient = ({ className, pacient, ...rest }) => {
     }
 
   }
-
   async function updatePatient() {
     try {
       await api.put(`patients/${id}`, {
