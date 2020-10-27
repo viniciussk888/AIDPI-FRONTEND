@@ -57,7 +57,7 @@ const PatientListView = () => {
     } catch (error) {
       notifyError()
     }
-  })
+  }, [searchPatientName, config])
 
   return (
     <Page

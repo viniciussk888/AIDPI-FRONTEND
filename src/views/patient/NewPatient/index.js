@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import {
@@ -138,7 +138,8 @@ const NewPatient = ({ className, pacient, ...rest }) => {
   const config = {
     headers: { Authorization: `Bearer ${useSelector(state => state.token)}` }
   };
-  async function fecthEditPatient(id) {
+
+  const fecthEditPatient = useCallback(async (id) => {
     try {
       const response = await api.get(`patients/${id}`, config)
       setId(response.data.id)
@@ -166,7 +167,8 @@ const NewPatient = ({ className, pacient, ...rest }) => {
     } catch (error) {
       console.log(error)
     }
-  }
+  }, [config])
+
   useEffect(() => {
     const id = localStorage.getItem('patientEdit')
     localStorage.setItem('patientEdit', null)
@@ -174,7 +176,8 @@ const NewPatient = ({ className, pacient, ...rest }) => {
       fecthEditPatient(id)
       setEnableEditButton(true)
     }
-  }, [])
+  }, [fecthEditPatient])
+
   async function handleSubmitPatientForm(e) {
     e.preventDefault()
     try {
@@ -207,6 +210,7 @@ const NewPatient = ({ className, pacient, ...rest }) => {
     }
 
   }
+
   async function updatePatient() {
     try {
       await api.put(`patients/${id}`, {

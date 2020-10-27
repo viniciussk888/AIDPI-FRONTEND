@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -35,9 +35,9 @@ const TopBar = ({
   const dispatch = useDispatch();
   const auth = useSelector(state => state.auth)
 
-  const logout = () => {
+  const logout = useCallback(() => {
     dispatch({ type: 'LOG_OUT' })
-  }
+  }, [dispatch])
 
   useEffect(() => {
     if (auth === 0) {

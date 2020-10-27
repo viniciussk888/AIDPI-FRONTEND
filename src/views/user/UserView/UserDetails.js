@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import Edit from '@material-ui/icons/Edit'
@@ -74,17 +74,14 @@ const UserDetails = ({ className, ...rest }) => {
     headers: { Authorization: `Bearer ${useSelector(state => state.token)}` }
   };
 
-  useEffect(() => {
-    async function fetchServiceStation() {
-      try {
-        const response = await api.get('servicesstations', config)
-        setServicesStations(response.data)
-      } catch (error) {
-        notifyError()
-      }
+  const fetchServiceStation = useCallback(async () => {
+    try {
+      const response = await api.get('servicesstations', config)
+      setServicesStations(response.data)
+    } catch (error) {
+      notifyError()
     }
-    fetchServiceStation()
-  }, [])
+  }, [config])
 
   useEffect(() => {
     async function fetchUsers() {
@@ -363,6 +360,7 @@ const UserDetails = ({ className, ...rest }) => {
                   helperText="Posto de atendimento"
                   name="serviceStation"
                   onChange={e => setServiceStation(e.target.value)}
+                  onFocus={fetchServiceStation}
                   required
                   select
                   SelectProps={{ native: true }}

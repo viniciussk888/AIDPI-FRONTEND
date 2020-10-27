@@ -39,7 +39,7 @@ const Dashboard = () => {
       }
     }
     fetchDashboard()
-  }, [config])
+  }, [config, totalPatients, totalDiagnostics, diagnosticsRate])
 
   return (
     <Page
