@@ -66,6 +66,46 @@ export default function Diarrhea() {
               />
             </Grid>
 
+            <Grid item md={12} xs={12}>
+              <FormControlLabel
+                labelPlacement="start"
+                control={<Checkbox className={classes.inputText} checked={state.checked3} onChange={handleChange} name="checked3" />}
+                label="A criança esta Letárgica, inconsciente, Inquieta ou irritada?"
+              />
+            </Grid>
+
+            <Grid item md={12} xs={12}>
+              <FormControlLabel
+                labelPlacement="start"
+                control={<Checkbox className={classes.inputText} checked={state.checked3} onChange={handleChange} name="checked3" />}
+                label="Os olhos estão fundos?"
+              />
+            </Grid>
+
+            <Grid item md={12} xs={12}>
+              <FormControlLabel
+                labelPlacement="start"
+                control={<Checkbox className={classes.inputText} checked={state.checked3} onChange={handleChange} name="checked3" />}
+                label="Não consegue beber ou bebe muito mal?"
+              />
+            </Grid>
+
+            <Grid item md={12} xs={12}>
+              <FormControlLabel
+                labelPlacement="start"
+                control={<Checkbox className={classes.inputText} checked={state.checked3} onChange={handleChange} name="checked3" />}
+                label="Bebe avidamente, com muita sede?"
+              />
+            </Grid>
+
+            <Grid item md={12} xs={12}>
+              <FormControlLabel
+                labelPlacement="start"
+                control={<Checkbox className={classes.inputText} checked={state.checked3} onChange={handleChange} name="checked3" />}
+                label="Sinal da prega: a pele volta muito lentamente ao estado anterior"
+              />
+            </Grid>
+
           </FormGroup>
         </Grid>
 

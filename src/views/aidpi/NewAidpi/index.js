@@ -127,7 +127,10 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonFlex: {
     display: 'flex'
-  }
+  },
+  textArea: {
+    minWidth: "100%",
+  },
 }));
 
 
@@ -206,12 +209,22 @@ const NewAidpi = ({ className, ...rest }) => {
                 {activeStep === steps.length ? (
                   <React.Fragment>
                     <Typography variant="h5" gutterBottom>
-                      Thank you for your order.
+                      RESULTADOS OBTIDOS
                 </Typography>
+
                     <Typography variant="subtitle1">
-                      Your order number is #2001539. We have emailed your order confirmation, and will
-                      send you an update when your order has shipped.
+                      A criança apresenta:
                 </Typography>
+                    <label for="tratar">TRATAR</label>
+                    <textarea
+                      id="tratar"
+                      className={classes.textArea}
+                      placeholder="Escreva as considerações"
+                      rows={10}
+                    />
+                    <br />
+                    <TextField variant="outlined" type="date" id="returndate" helperText="Data do próximo retorno caso houver" />
+
                   </React.Fragment>
                 ) : (
                     <React.Fragment>
