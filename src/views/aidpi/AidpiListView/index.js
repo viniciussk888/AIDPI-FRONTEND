@@ -62,7 +62,7 @@ const AidpiListView = () => {
   return (
     <Page
       className={classes.root}
-      title="Pacientes"
+      title="AIDPI"
     >
       <Container maxWidth={false}>
         <div

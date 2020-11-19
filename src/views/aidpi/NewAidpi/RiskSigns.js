@@ -39,6 +39,7 @@ export default function RiskSigns() {
     if (selected === false) {
       risks.pop(risk)
     }
+    localStorage.setItem("risk", JSON.stringify(risks))
   }
 
   const handleChange = (event) => {

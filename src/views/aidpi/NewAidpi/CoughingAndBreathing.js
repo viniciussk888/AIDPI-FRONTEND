@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  Typography, Checkbox, FormControlLabel, Grid, TextField
+  Typography, Checkbox, FormControlLabel, Grid, TextField, Button
 } from '@material-ui/core';
 import FormGroup from '@material-ui/core/FormGroup';
 import { makeStyles } from '@material-ui/core/styles';
@@ -14,10 +14,14 @@ const useStyles = makeStyles((theme) => ({
   },
   inputText: {
     marginLeft: theme.spacing(1)
-  }
+  },
+  buttons: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
 }));
 
-export default function CoughingAndBreathing() {
+export default function CoughingAndBreathing(props) {
   const classes = useStyles()
   const [checked, setChecked] = useState(false);
 
@@ -31,8 +35,26 @@ export default function CoughingAndBreathing() {
   const [sinalDeRisco, setSinalDeRisco] = useState(false)
 
   const [sibilancia, setSibilancia] = useState(false)
+  const [controleSibi1, setControleSibi1] = useState(false)
+  const [controleSibi2, setControleSibi2] = useState(false)
+  const [controleSibi3, setControleSibi3] = useState(false)
   const [classificacaoSibilancia, setClassificacaoSibilancia] = useState("")
-  console.log(classificacaoSibilancia)
+
+  useEffect(() => {
+    if (classificacaoSibilancia === "SIBILÂNCIA GRAVE") {
+      setControleSibi1(true)
+      setControleSibi2(false)
+      setControleSibi3(false)
+    } else if (classificacaoSibilancia === "SIBILÂNCIA MODERADA") {
+      setControleSibi1(false)
+      setControleSibi2(true)
+      setControleSibi3(false)
+    } else if (classificacaoSibilancia === "SIBILÂNCIA LEVE") {
+      setControleSibi1(false)
+      setControleSibi2(false)
+      setControleSibi3(true)
+    }
+  }, [classificacaoSibilancia])
 
   function caseSibilancia() {
     return (
@@ -44,7 +66,7 @@ export default function CoughingAndBreathing() {
         <Grid item md={12} xs={12}>
           <strong>SIBILÂNCIA GRAVE:</strong><br /> <FormControlLabel
             labelPlacement="end"
-            control={<Checkbox className={classes.inputText} checked={false} onChange={() => (setClassificacaoSibilancia("SIBILÂNCIA GRAVE"))} name="GRAVE" />}
+            control={<Checkbox checked={controleSibi1} className={classes.inputText} onChange={() => (setClassificacaoSibilancia("SIBILÂNCIA GRAVE"), setControleSibi1(true))} name="GRAVE" />}
             label="• Qualquer sinal geral de perigo
                 • Agitada
                 • Estridor em repouso
@@ -57,7 +79,7 @@ export default function CoughingAndBreathing() {
         <Grid item md={12} xs={12}>
           <strong>SIBILÂNCIA MODERADA:</strong><br /> <FormControlLabel
             labelPlacement="end"
-            control={<Checkbox className={classes.inputText} checked={false} onChange={() => (setClassificacaoSibilancia("SIBILÂNCIA MODERADA"))} name="MODERADA" />}
+            control={<Checkbox checked={controleSibi2} className={classes.inputText} onChange={() => (setClassificacaoSibilancia("SIBILÂNCIA MODERADA"))} name="MODERADA" />}
             label="• Nível de consciência normal com períodos de agitação
                 • Fala entrecortada ou choro entrecortado
                 • Tiragem subcostal
@@ -70,7 +92,7 @@ export default function CoughingAndBreathing() {
         <Grid item md={12} xs={12}>
           <strong>SIBILÂNCIA LEVE:</strong><br /> <FormControlLabel
             labelPlacement="end"
-            control={<Checkbox label="SIBILÂNCIA LEVE" className={false} checked={false} onChange={() => (setClassificacaoSibilancia("SIBILÂNCIA LEVE"))} name="LEVE" />}
+            control={<Checkbox checked={controleSibi3} className={classes.inputText} onChange={() => (setClassificacaoSibilancia("SIBILÂNCIA LEVE"))} name="LEVE" />}
             label="• Não há sinais suficientes para classificar como sibilância grave ou moderada
                 • Sat. O2 ≥ 95% * em ar ambiente"
           />
@@ -145,10 +167,19 @@ export default function CoughingAndBreathing() {
               caseSibilancia()
               :
               null}
+            <div className={classes.buttons}>
+              <Button
+                color="primary"
+                variant="contained"
+                className={classes.buttons}
+                onClick={() => (props.setNewDiagnosis("TESTE TESTE"))}
+              >
+                Obter resultado
+        </Button>
+            </div>
 
           </FormGroup>
         </Grid>
-
         :
         <h5>ou avançar para proxima etapa!</h5>
       }

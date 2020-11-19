@@ -51,29 +51,6 @@ const steps = [
   'SITUAÇÃO DAS VACINAS'
 ];
 
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return <RiskSigns />;
-    case 1:
-      return <CoughingAndBreathing />;
-    case 2:
-      return <Diarrhea />;
-    case 3:
-      return <Fever />;
-    case 4:
-      return <EarProblem />;
-    case 5:
-      return <SoreThroat />;
-    case 6:
-      return <Malnutrition />;
-    case 7:
-      return <Vaccines />;
-    default:
-      throw new Error('Unknown step');
-  }
-}
-
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -143,9 +120,37 @@ const NewAidpi = ({ className, ...rest }) => {
     headers: { Authorization: `Bearer ${useSelector(state => state.token)}` }
   };
 
+  const [activeStep, setActiveStep] = useState(0);
   const [searchPatientSus, setSearchPatientSus] = useState('')
   const [patient, setPatient] = useState([])
+  const [risks, setRisks] = useState([])
+  const [diagnosis, setDiagnosis] = useState([])
 
+  function setNewDiagnosis(diagnosis) {
+    setDiagnosis(diagnosis)
+  }
+  function getStepContent(step) {
+    switch (step) {
+      case 0:
+        return <RiskSigns />;
+      case 1:
+        return <CoughingAndBreathing setNewDiagnosis={setNewDiagnosis} />;
+      case 2:
+        return <Diarrhea />;
+      case 3:
+        return <Fever />;
+      case 4:
+        return <EarProblem />;
+      case 5:
+        return <SoreThroat />;
+      case 6:
+        return <Malnutrition />;
+      case 7:
+        return <Vaccines />;
+      default:
+        throw new Error('Unknown step');
+    }
+  }
   async function handleSubmitPatientForm(e) {
     e.preventDefault()
     try {
@@ -155,16 +160,20 @@ const NewAidpi = ({ className, ...rest }) => {
     }
 
   }
-
-  const [activeStep, setActiveStep] = React.useState(0);
   const handleNext = () => {
+    const risk = JSON.parse(localStorage.getItem("risk")) || 0
+    if (risk.length > 0) {
+      setRisks(risk)
+      setActiveStep(8)
+      return alert("CRIANÇA COM SINAIS DE PERIGO!")
+    }
     setActiveStep(activeStep + 1);
   };
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
-
   async function searchPatientWithSus() {
+    localStorage.setItem("risk", 0)
     if (!searchPatientSus) {
       return alert("Informe o Nº do SUS!")
     }
@@ -174,6 +183,7 @@ const NewAidpi = ({ className, ...rest }) => {
       }, config)
       setPatient(response.data[0])
       notifySucess()
+      setActiveStep(0)
     } catch (error) {
       console.log(error)
       notifyError()
@@ -190,7 +200,6 @@ const NewAidpi = ({ className, ...rest }) => {
           <CssBaseline />
           <AppBar color="default" className={classes.appBar}>
             <p>Nome: <strong>{patient.name}</strong> Sexo: <strong>{getInitials(patient.sex)}</strong> SUS: <strong>{patient.sus}</strong> Idade:<strong> {calcAge(patient.birthDate)} anos</strong></p>
-            <p>Bairro: <strong>{patient.district}</strong> Rua: <strong>{patient.adress}</strong> Numero: <strong>{patient.number}</strong> Cidade: <strong>{patient.city}</strong></p>
           </AppBar>
           <main className={classes.layout}>
             <Paper className={classes.paper}>
@@ -208,23 +217,33 @@ const NewAidpi = ({ className, ...rest }) => {
               <React.Fragment>
                 {activeStep === steps.length ? (
                   <React.Fragment>
-                    <Typography variant="h5" gutterBottom>
-                      RESULTADOS OBTIDOS
-                </Typography>
-
-                    <Typography variant="subtitle1">
-                      A criança apresenta:
-                </Typography>
-                    <label for="tratar">TRATAR</label>
-                    <textarea
-                      id="tratar"
-                      className={classes.textArea}
-                      placeholder="Escreva as considerações"
-                      rows={10}
-                    />
                     <br />
-                    <TextField variant="outlined" type="date" id="returndate" helperText="Data do próximo retorno caso houver" />
-
+                    <Typography variant="h5" gutterBottom>
+                      DIAGNÓSTICOS:
+                </Typography>
+                    <Typography variant="subtitle1">
+                      <strong>{diagnosis}</strong><br />
+                    </Typography>
+                    <Typography variant="subtitle1">
+                      {risks.length > 0 ?
+                        <>
+                          <strong>A criança apresenta sinal geral de perigo e necessita ser urgentemente tratada, completar imediatamente a avaliação, administrar o tratamento indicado prévio à referência e encaminhar urgentemente ao hospital.</strong>
+                          <p>{localStorage.getItem("risk")}</p>
+                        </>
+                        :
+                        <>
+                          <label for="tratar">OBSERVAÇÔES</label>
+                          <textarea
+                            id="tratar"
+                            className={classes.textArea}
+                            placeholder="Escreva as considerações"
+                            rows={10}
+                          />
+                          <br />
+                          <TextField variant="outlined" type="date" id="returndate" helperText="Data do próximo retorno caso houver" />
+                        </>
+                      }
+                    </Typography>
                   </React.Fragment>
                 ) : (
                     <React.Fragment>
@@ -241,7 +260,7 @@ const NewAidpi = ({ className, ...rest }) => {
                           onClick={handleNext}
                           className={classes.button}
                         >
-                          {activeStep === steps.length - 1 ? 'Gravar' : 'Avançar'}
+                          {activeStep === steps.length - 1 ? 'Finalizar' : 'Avançar'}
                         </Button>
                       </div>
                     </React.Fragment>
