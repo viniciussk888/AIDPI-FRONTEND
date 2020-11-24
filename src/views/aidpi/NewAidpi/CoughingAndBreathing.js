@@ -4,6 +4,8 @@ import {
 } from '@material-ui/core';
 import FormGroup from '@material-ui/core/FormGroup';
 import { makeStyles } from '@material-ui/core/styles';
+import { useSelector } from 'react-redux';
+import api from 'src/services/api';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -23,10 +25,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CoughingAndBreathing(props) {
   const classes = useStyles()
-  const [checked, setChecked] = useState(false);
 
+  const [checked, setChecked] = useState(false);
   const handleChange = () => {
     setChecked(!checked);
+  };
+
+  const config = {
+    headers: { Authorization: `Bearer ${useSelector(state => state.token)}` }
   };
 
   const [respiraçaoRapida, setRespiraçaoRapida] = useState(false)
@@ -35,10 +41,11 @@ export default function CoughingAndBreathing(props) {
   const [sinalDeRisco, setSinalDeRisco] = useState(false)
 
   const [sibilancia, setSibilancia] = useState(false)
+  const [classificacaoSibilancia, setClassificacaoSibilancia] = useState("")
+
   const [controleSibi1, setControleSibi1] = useState(false)
   const [controleSibi2, setControleSibi2] = useState(false)
   const [controleSibi3, setControleSibi3] = useState(false)
-  const [classificacaoSibilancia, setClassificacaoSibilancia] = useState("")
 
   useEffect(() => {
     if (classificacaoSibilancia === "SIBILÂNCIA GRAVE") {
@@ -99,6 +106,23 @@ export default function CoughingAndBreathing(props) {
         </Grid>
       </>
     )
+  }
+
+  async function enviarBack() {
+    try {
+      const response = await api.post(`aidpivalid`, {
+        step: 2,
+        respiraçaoRapida,
+        tiragemSubcostal,
+        estridor,
+        sinalDeRisco,
+        sibilancia,
+        classificacaoSibilancia
+      }, config)
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -172,7 +196,8 @@ export default function CoughingAndBreathing(props) {
                 color="primary"
                 variant="contained"
                 className={classes.buttons}
-                onClick={() => (props.setNewDiagnosis("TESTE TESTE"))}
+                //onClick={() => (props.setNewDiagnosis("TESTE TESTE"))}enviarBack
+                onClick={enviarBack}
               >
                 Obter resultado
         </Button>
