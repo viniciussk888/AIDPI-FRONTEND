@@ -73,7 +73,7 @@ export default function CoughingAndBreathing(props) {
         <Grid item md={12} xs={12}>
           <strong>SIBILÂNCIA GRAVE:</strong><br /> <FormControlLabel
             labelPlacement="end"
-            control={<Checkbox checked={controleSibi1} className={classes.inputText} onChange={() => (setClassificacaoSibilancia("SIBILÂNCIA GRAVE"), setControleSibi1(true))} name="GRAVE" />}
+            control={<Checkbox checked={controleSibi1} className={classes.inputText} onChange={() => ([setClassificacaoSibilancia("SIBILÂNCIA GRAVE"), setControleSibi1(true)])} name="GRAVE" />}
             label="• Qualquer sinal geral de perigo
                 • Agitada
                 • Estridor em repouso
@@ -119,7 +119,8 @@ export default function CoughingAndBreathing(props) {
         sibilancia,
         classificacaoSibilancia
       }, config)
-      console.log(response)
+      props.setNewDiagnosis(response.data)
+      alert("Diagnóstico obtido! Prossiga ate o fim do atendimento para receber o resultado.")
     } catch (error) {
       console.log(error)
     }
@@ -196,7 +197,6 @@ export default function CoughingAndBreathing(props) {
                 color="primary"
                 variant="contained"
                 className={classes.buttons}
-                //onClick={() => (props.setNewDiagnosis("TESTE TESTE"))}enviarBack
                 onClick={enviarBack}
               >
                 Obter resultado

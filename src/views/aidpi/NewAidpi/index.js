@@ -222,12 +222,19 @@ const NewAidpi = ({ className, ...rest }) => {
                       DIAGNÓSTICOS:
                 </Typography>
                     <Typography variant="subtitle1">
-                      <strong>{diagnosis}</strong><br />
+                      <strong>{diagnosis.diagnostico}</strong>
+                      <p>{diagnosis.tratamento}</p>
+                      {diagnosis.sibilancia ?
+                        <>
+                          <strong>{diagnosis.sibilancia}</strong>
+                          <p>{diagnosis.tratamentoSibilancia}</p>
+                        </>
+                        : null}
                     </Typography>
                     <Typography variant="subtitle1">
                       {risks.length > 0 ?
                         <>
-                          <strong>A criança apresenta sinal geral de perigo e necessita ser urgentemente tratada, completar imediatamente a avaliação, administrar o tratamento indicado prévio à referência e encaminhar urgentemente ao hospital.</strong>
+                          <strong>A criança apresenta sinal geral de perigo e necessita ser urgentemente tratada, completar imediatamente a avaliação, administrar o tratamento indicado prévio à referência e encaminhar URGENTEMENTE ao hospital.</strong>
                           <p>{localStorage.getItem("risk")}</p>
                         </>
                         :
@@ -241,6 +248,13 @@ const NewAidpi = ({ className, ...rest }) => {
                           />
                           <br />
                           <TextField variant="outlined" type="date" id="returndate" helperText="Data do próximo retorno caso houver" />
+                          <br />
+                          <Button variant="outlined" color="primary" className={classes.button}>
+                            GRAVAR ATENDIMENTO
+                          </Button>
+                          <Button variant="outlined" color="primary" className={classes.button}>
+                            IMPRIMIR
+                          </Button>
                         </>
                       }
                     </Typography>
